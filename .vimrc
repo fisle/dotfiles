@@ -1,5 +1,5 @@
-colorscheme mustang
-"colorscheme darkknight256
+"colorscheme mustang
+colorscheme twilight
 set fileencoding=utf-8
 set encoding=utf-8
 set enc=utf-8
