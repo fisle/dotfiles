@@ -1,5 +1,4 @@
-"colorscheme mustang
-colorscheme twilight
+set t_Co=256
 set fileencoding=utf-8
 set encoding=utf-8
 set enc=utf-8
@@ -9,21 +8,20 @@ set smarttab
 set shiftwidth=2
 set softtabstop=2
 syntax on
+set background=dark
 filetype indent plugin on
+"colorscheme mustang
+colorscheme solarized
 set modeline
 
-if &term =~ "xterm"
-  "256 color --
-  let &t_Co=256
-  " restore screen after quitting
-  set t_ti=ESC7ESC[rESC[?47h t_te=ESC[?47lESC8
-  if has("terminfo")
-    let &t_Sf="\ESC[3%p1%dm"
-    let &t_Sb="\ESC[4%p1%dm"
-  else
-    let &t_Sf="\ESC[3%dm"
-    let &t_Sb="\ESC[4%dm"
-  endif
+" restore screen after quitting
+set t_ti=ESC7ESC[rESC[?47h t_te=ESC[?47lESC8
+if has("terminfo")
+  let &t_Sf="\ESC[3%p1%dm"
+  let &t_Sb="\ESC[4%p1%dm"
+else
+  let &t_Sf="\ESC[3%dm"
+  let &t_Sb="\ESC[4%dm"
 endif
 
 "plugarikamaa:
