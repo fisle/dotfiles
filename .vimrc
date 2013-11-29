@@ -14,6 +14,9 @@ filetype indent plugin on
 colorscheme solarized
 set modeline
 
+nnoremap <silent> <C-t> <Esc>:tabnew<CR>
+map <F4> <Esc>:registers<CR>
+
 " restore screen after quitting
 set t_ti=ESC7ESC[rESC[?47h t_te=ESC[?47lESC8
 if has("terminfo")
