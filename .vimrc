@@ -3,10 +3,10 @@ set fileencoding=utf-8
 set encoding=utf-8
 set enc=utf-8
 set termencoding=utf-8
-"set expandtab
-set smarttab
+set expandtab
+"set smarttab
 set shiftwidth=4
-"set softtabstop=2
+set softtabstop=4
 syntax on
 set background=dark
 filetype indent plugin on
