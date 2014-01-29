@@ -20,4 +20,8 @@ echo "Creating symlink /home/$input_user/.tmux.conf to `pwd`/.tmux.conf"
 ln -s `pwd`/.tmux.conf /home/$input_user/.tmux.conf
 echo "Creating symlink /root/.tmux.conf to `pwd`/.tmux.conf"
 ln -s `pwd`/.tmux.conf /root/.tmux.conf
+echo "Creating symlink /root/.zshrc to `pwd`/.zshrc_root"
+ln -s `pwd`/.zshrc_root /root/.zshrc
+echo "Creating symlink /home/$input_user/.zshrc to `pwd`/.zshrc"
+ln -s `pwd`/.zshrc /home/$input_user/.zshrc
 echo "All done! Quitting."
