@@ -16,4 +16,8 @@ echo "Creating symlink /home/$input_user/.vim to `pwd`/.vim"
 ln -s `pwd`/.vim /home/$input_user/.vim
 echo "Creating symlink /home/$input_user/.vimrc to `pwd`/.vimrc"
 ln -s `pwd`/.vimrc /home/$input_user/.vimrc
+echo "Creating symlink /home/$input_user/.tmux.conf to `pwd`/.tmux.conf"
+ln -s `pwd`/.tmux.conf /home/$input_user/.tmux.conf
+echo "Creating symlink /root/.tmux.conf to `pwd`/.tmux.conf"
+ln -s `pwd`/.tmux.conf /root/.tmux.conf
 echo "All done! Quitting."
