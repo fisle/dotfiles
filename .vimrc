@@ -10,8 +10,7 @@ set softtabstop=4
 syntax on
 set background=dark
 filetype indent plugin on
-"colorscheme mustang
-colorscheme solarized
+colorscheme jellybeans
 set modeline
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
@@ -29,8 +28,11 @@ endif
 
 "plugarikamaa:
 execute pathogen#infect()
-map <F2> :NERDTreeToggle<CR>
+"map <F2> :NERDTreeToggle<CR>
+map <F2> :NERDTreeTabsToggle<CR>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 set laststatus=2
 set pastetoggle=<F3>
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd FileType yaml set shiftwidth=2|set softtabstop=2
