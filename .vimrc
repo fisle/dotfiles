@@ -61,3 +61,4 @@ set laststatus=2
 set pastetoggle=<F3>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd FileType yaml set shiftwidth=2|set softtabstop=2
+set fillchars+=vert:┃
