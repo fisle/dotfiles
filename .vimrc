@@ -35,19 +35,19 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
-" Plugarit tähän"
+" Plugarit tähän
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'jaxbot/brolink.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ervandew/supertab'
-Plugin 'scrooloose/syntastic'
-Plugin 'nvie/vim-flake8'
 Plugin 'lepture/vim-jinja'
 Plugin 'xsbeats/vim-blade'
 Plugin 'burnettk/vim-angular'
+Plugin 'scrooloose/syntastic'
 Plugin 'klen/python-mode'
+
 
 call vundle#end()
 filetype plugin indent on
