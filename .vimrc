@@ -12,6 +12,7 @@ set background=dark
 filetype indent plugin on
 colorscheme jellybeans
 set modeline
+set mouse=a
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
@@ -26,9 +27,33 @@ else
   let &t_Sb="\ESC[4%dm"
 endif
 
-"plugarikamaa:
-execute pathogen#infect()
-"map <F2> :NERDTreeToggle<CR>
+" Vundle
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+
+" Plugarit tähän"
+Plugin 'itchyny/lightline.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'jaxbot/brolink.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'ervandew/supertab'
+Plugin 'scrooloose/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'lepture/vim-jinja'
+Plugin 'xsbeats/vim-blade'
+Plugin 'burnettk/vim-angular'
+Plugin 'klen/python-mode'
+
+call vundle#end()
+filetype plugin indent on
+" vundle end
+
+map <F5> :PluginInstall<CR>
 map <F2> :NERDTreeTabsToggle<CR>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
