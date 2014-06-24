@@ -48,6 +48,7 @@ Plugin 'burnettk/vim-angular'
 Plugin 'scrooloose/syntastic'
 Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-fugitive'
 
 
 call vundle#end()
