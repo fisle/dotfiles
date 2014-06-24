@@ -13,6 +13,12 @@ filetype indent plugin on
 colorscheme jellybeans
 set modeline
 set mouse=a
+if has('gui_running')
+    set guioptions-=m
+    set guioptions-=T
+    colorscheme vydark
+endif
+
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
