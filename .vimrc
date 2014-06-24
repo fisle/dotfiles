@@ -47,6 +47,7 @@ Plugin 'xsbeats/vim-blade'
 Plugin 'burnettk/vim-angular'
 Plugin 'scrooloose/syntastic'
 Plugin 'klen/python-mode'
+Plugin 'kien/ctrlp.vim'
 
 
 call vundle#end()
