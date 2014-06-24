@@ -56,6 +56,7 @@ filetype plugin indent on
 
 map <F5> :PluginInstall<CR>
 map <F2> :NERDTreeTabsToggle<CR>
+map <F9> :CtrlPMRU<CR>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 set laststatus=2
