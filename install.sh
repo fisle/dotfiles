@@ -8,6 +8,8 @@ echo "Hit CTRL+C to cancel"
 echo "======="
 echo "Enter username:"
 read input_user
+echo "Creating symlink for .Xdefaults"
+ln -s `pwd`/.Xdefaults /home/$input_user/.Xdefaults
 echo "Creating symlink /root/.vim to `pwd`/.vim"
 ln -s `pwd`/.vim /root/.vim
 echo "Creating symlink /root/.vimrc to `pwd`/.vimrc"
