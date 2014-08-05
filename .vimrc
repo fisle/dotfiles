@@ -19,6 +19,9 @@ if has('gui_running')
     colorscheme vydark
 endif
 
+set -g set-titles on
+set -g set-titles-string '#T'
+
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
@@ -52,7 +55,7 @@ Plugin 'lepture/vim-jinja'
 Plugin 'xsbeats/vim-blade'
 Plugin 'burnettk/vim-angular'
 Plugin 'scrooloose/syntastic'
-Plugin 'klen/python-mode'
+"Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 
