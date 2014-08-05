@@ -19,10 +19,6 @@ if has('gui_running')
     colorscheme vydark
 endif
 
-set -g set-titles on
-set -g set-titles-string '#T'
-
-
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
 
