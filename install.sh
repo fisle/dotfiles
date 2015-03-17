@@ -1,29 +1,39 @@
 #!/bin/bash
+ROOT=1
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
+    ROOT=0
 fi
-echo "This script will install vim configs for root user and user of your choice"
+
+echo "Hello! I will install zsh, tmux and vim configs for user of your choice"
+if [ $ROOT -eq 1 ]
+then
+    echo "I will also install them for root user"
+else
+    echo "Not run with superuser rights - won't be installed for root"
+fi
+
 echo "Hit CTRL+C to cancel"
 echo "======="
 echo "Enter username:"
 read input_user
-echo "Creating symlink for .Xdefaults"
-ln -s `pwd`/.Xdefaults /home/$input_user/.Xdefaults
-echo "Creating symlink /root/.vim to `pwd`/.vim"
-ln -s `pwd`/.vim /root/.vim
-echo "Creating symlink /root/.vimrc to `pwd`/.vimrc"
-ln -s `pwd`/.vimrc /root/.vimrc
-echo "Creating symlink /home/$input_user/.vim to `pwd`/.vim"
-ln -s `pwd`/.vim /home/$input_user/.vim
-echo "Creating symlink /home/$input_user/.vimrc to `pwd`/.vimrc"
-ln -s `pwd`/.vimrc /home/$input_user/.vimrc
-echo "Creating symlink /home/$input_user/.tmux.conf to `pwd`/.tmux.conf"
-ln -s `pwd`/.tmux.conf /home/$input_user/.tmux.conf
-echo "Creating symlink /root/.tmux.conf to `pwd`/.tmux.conf"
-ln -s `pwd`/.tmux.conf /root/.tmux.conf
-echo "Creating symlink /root/.zshrc to `pwd`/.zshrc_root"
-ln -s `pwd`/.zshrc_root /root/.zshrc
-echo "Creating symlink /home/$input_user/.zshrc to `pwd`/.zshrc"
-ln -s `pwd`/.zshrc /home/$input_user/.zshrc
+
+
+for i in .Xdefaults .vim .vimrc .tmux.conf .zshrc
+do
+    ln -s "$(pwd)/$i" "/home/$input_user/$i"
+done
+echo "Symlinks created for user $input_user"
+
+if [ $ROOT -eq 1 ]; then
+    for i in .Xdefaults .vim .vimrc .tmux.conf .zshrc_root
+    do
+        if [ $i == ".zshrc_root" ]; then
+            ln -s "$(pwd)/$i" "/root/.zshrc"
+        else
+            ln -s "$(pwd)/$i" "/root/$i"
+        fi
+    done
+    echo "Symlinks created for root"
+fi
+
 echo "All done! Quitting."
