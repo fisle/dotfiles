@@ -77,7 +77,7 @@ set fillchars+=vert:┃
 set dir=~/.vimswap/_swap//
 set backup
 set backupdir=~/.vimswap/_backup/,~/tmp,.
-let g:syntastic_python_flake8_post_args='--ignore=E128'
+let g:syntastic_python_flake8_post_args='--ignore=E128,E121'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
