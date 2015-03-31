@@ -1,6 +1,4 @@
-!URxvt*font: xft:Terminus:pixelsize=8
-urxvt*font: -artwiz-lime.se-*-r-normal-*-10-*-*-*-*-*-*-*
-urxvt*boldFont: -artwiz-lime.se-*-r-normal-*-10-*-*-*-*-*-*-*
+URxvt*font: xft:Terminus:pixelsize=8
 URxvt*scrollBar: false
 URxvt*internalBorder: 10
 

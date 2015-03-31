@@ -43,7 +43,7 @@ Plugin 'gmarik/Vundle.vim'
 " Plugarit tähän
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
-Plugin 'jaxbot/brolink.vim'
+"Plugin 'jaxbot/brolink.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ervandew/supertab'
@@ -60,6 +60,10 @@ call vundle#end()
 filetype plugin indent on
 " vundle end
 
+" Latex stuff
+nnoremap <F6> :w<CR>:!rubber --pdf --warn all %<CR>
+nnoremap <F7> :!mupdf %:r.pdf &<CR><CR>
+
 map <F5> :PluginInstall<CR>
 map <F2> :NERDTreeTabsToggle<CR>
 map <F9> :CtrlPMRU<CR>
@@ -70,3 +74,15 @@ set pastetoggle=<F3>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd FileType yaml set shiftwidth=2|set softtabstop=2
 set fillchars+=vert:┃
+set dir=~/.vimswap/_swap//
+set backup
+set backupdir=~/.vimswap/_backup/,~/tmp,.
+let g:syntastic_python_flake8_post_args='--ignore=E128'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
