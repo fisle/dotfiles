@@ -46,6 +46,6 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR=vim
 # Customize to your needs...
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
-export PATH=$PATH:/home/dflies/scripts
-eval "`dircolors -b /home/dflies/.dircolors`"
+export PATH=$PATH:$HOME/scripts
+eval "$(dircolors -b $HOME/.dircolors)"
 export PANEL_FIFO="/tmp/panel-fifo"
