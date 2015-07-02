@@ -16,7 +16,6 @@ set mouse=a
 if has('gui_running')
     set guioptions-=m
     set guioptions-=T
-    colorscheme vydark
 endif
 
 cmap w!! w !sudo tee > /dev/null %
@@ -34,16 +33,6 @@ nnoremap <C-n> :call NumberToggle()<CR>
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
-
-" restore screen after quitting
-set t_ti=ESC7ESC[rESC[?47h t_te=ESC[?47lESC8
-if has("terminfo")
-  let &t_Sf="\ESC[3%p1%dm"
-  let &t_Sb="\ESC[4%p1%dm"
-else
-  let &t_Sf="\ESC[3%dm"
-  let &t_Sb="\ESC[4%dm"
-endif
 
 " Vundle
 set nocompatible
