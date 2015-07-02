@@ -68,6 +68,8 @@ Plugin 'scrooloose/syntastic'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'wting/rust.vim'
+Plugin 'bpearson/vim-phpcs'
 
 
 call vundle#end()
@@ -99,3 +101,4 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_php_phpcs_args='--standard=PSR2'
