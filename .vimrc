@@ -19,6 +19,19 @@ if has('gui_running')
     colorscheme vydark
 endif
 
+cmap w!! w !sudo tee > /dev/null %
+
+function! NumberToggle()
+    if(&relativenumber == 1)
+        set norelativenumber
+    else
+        set relativenumber
+        set number
+    endif
+endfunc
+
+nnoremap <C-n> :call NumberToggle()<CR>
+
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
 
@@ -54,6 +67,7 @@ Plugin 'scrooloose/syntastic'
 "Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
 
 
 call vundle#end()
@@ -77,7 +91,6 @@ set fillchars+=vert:┃
 set dir=~/.vimswap/_swap//
 set backup
 set backupdir=~/.vimswap/_backup/,~/tmp,.
-let g:syntastic_python_flake8_post_args='--ignore=E128,E121'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
