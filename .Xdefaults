@@ -1,4 +1,4 @@
-URxvt*font: xft:Terminus:pixelsize=8
+URxvt*font: xft:Ubuntu Mono:pixelsize=12
 URxvt*scrollBar: false
 URxvt*internalBorder: 10
 
@@ -7,42 +7,40 @@ URxvt.perl-ext-common: default,matcher
 URxvt.url-launcher: firefox
 URxvt.matcher.button: 1
 
-! Multicolor
+! Increase scrollback buffer
+URxvt*saveLines: 40000
+
+*foreground: #DDCCBB
+
+! Brown BG
+!*background: #30251D
+
+! Grey BG
+*background: #151515
+
 
 !black
-*color0:  #171717
-*color8:  #737373
-
+*color0:     #393939
+*color8:     #AF875F
 !red
-*color1:  #FF5E5E
-*color9:  #FF7878
-
+*color1:     #BF1E2D
+*color9:     #E7212A
 !green
-*color2:  #9CE82B
-*color10: #9ACD32
-
+*color2:     #9DBA3A
+*color10:    #A9C938
 !yellow
-*color3:  #F0E68C
-*color11: #EEE8AA
-
+*color3:     #F5B915
+*color11:    #F7D325
 !blue
-*color4:  #008AFF
-*color12: #4F98FF
-
+*color4:     #1CA1DB
+*color12:    #00AFDA
 !magenta
-*color5:  #E88CFF
-*color13: #EDA6FF
-
+*color5:     #652F90
+*color13:    #894E9F
 !cyan
-*color6:  #87CEFA
-*color14: #B0E2FF
-
+*color6:     #EA7D24
+*color14:    #F79321
 !white
-*color7:  #DCDCCC
-*color15: #FFFFFF
-
-*background: #101010
-*foreground: #d4d4d4
-
-*cursorColor: darkorange2
+*color7:     #E7E8E9
+*color15:    #F3F3F4
 
