@@ -13,6 +13,7 @@ filetype indent plugin on
 colorscheme jellybeans
 set modeline
 set mouse=a
+set incsearch
 if has('gui_running')
     set guioptions-=m
     set guioptions-=T
