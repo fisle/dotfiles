@@ -32,6 +32,11 @@ endfunc
 
 nnoremap <C-n> :call NumberToggle()<CR>
 
+function! Python2()
+    let g:syntastic_python_python_exec = '/usr/bin/python2'
+endfunc
+nnoremap <F12> :call Python2()<CR>
+
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 map <F4> <Esc>:registers<CR>
 
@@ -60,6 +65,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'wting/rust.vim'
 Plugin 'bpearson/vim-phpcs'
+Plugin 'terryma/vim-multiple-cursors'
 
 
 call vundle#end()
@@ -92,3 +98,4 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_php_phpcs_args='--standard=PSR2'
+let g:syntastic_html_tidy_exec = 'tidy'
