@@ -1,6 +1,7 @@
 URxvt*font: xft:Ubuntu Mono:pixelsize=12
 URxvt*scrollBar: false
 URxvt*internalBorder: 10
+URxvt.urgentOnBell: true
 
 ! Clickable URLs
 URxvt.perl-ext-common: default,matcher
