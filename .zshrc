@@ -40,12 +40,15 @@ DISABLE_AUTO_UPDATE="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git extract autoenv)
+plugins=(git extract)
 
 source $ZSH/oh-my-zsh.sh
 export EDITOR=vim
 # Customize to your needs...
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 export PATH=$PATH:$HOME/scripts
-eval "$(dircolors -b $HOME/.dircolors)"
 export PANEL_FIFO="/tmp/panel-fifo"
+
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+alias mpd='mpd ~/.config/mpd/mpd.conf'
+export TMPDIR=/tmp
