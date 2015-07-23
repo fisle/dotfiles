@@ -15,7 +15,7 @@ colorscheme monokai
 set modeline
 set mouse=a
 set incsearch
-set colorcolumn=80
+autocmd FileType * if &filetype == 'python' | set colorcolumn=80 | endif
 if has('gui_running')
     set guioptions-=m
     set guioptions-=T
