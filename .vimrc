@@ -10,10 +10,12 @@ set softtabstop=4
 syntax on
 set background=dark
 filetype indent plugin on
-colorscheme jellybeans
+"colorscheme jellybeans
+colorscheme monokai
 set modeline
 set mouse=a
 set incsearch
+set colorcolumn=80
 if has('gui_running')
     set guioptions-=m
     set guioptions-=T
@@ -34,6 +36,7 @@ nnoremap <C-n> :call NumberToggle()<CR>
 
 function! Python2()
     let g:syntastic_python_python_exec = '/usr/bin/python2'
+    edit %
 endfunc
 nnoremap <F12> :call Python2()<CR>
 
