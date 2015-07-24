@@ -32,6 +32,8 @@ function! NumberToggle()
     endif
 endfunc
 
+let @f = 'f,a€kD'
+
 nnoremap <C-n> :call NumberToggle()<CR>
 
 function! Python2()
