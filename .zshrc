@@ -52,3 +52,5 @@ export PANEL_FIFO="/tmp/panel-fifo"
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 alias mpd='mpd ~/.config/mpd/mpd.conf'
 export TMPDIR=/tmp
+
+alias kää='google-translate en fi'
