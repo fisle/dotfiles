@@ -5,12 +5,12 @@ set enc=utf-8
 set termencoding=utf-8
 set expandtab
 "set smarttab
+set backspace=indent,eol,start
 set shiftwidth=4
 set softtabstop=4
 syntax on
 set background=dark
 filetype indent plugin on
-"colorscheme jellybeans
 colorscheme monokai
 set modeline
 set mouse=a
@@ -70,7 +70,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'wting/rust.vim'
 Plugin 'bpearson/vim-phpcs'
-Plugin 'terryma/vim-multiple-cursors'
+Plugin 'gorodinskiy/vim-coloresque'
+Plugin 'digitaltoad/vim-jade'
 
 
 call vundle#end()
@@ -80,15 +81,14 @@ filetype plugin indent on
 " Latex stuff
 nnoremap <F6> :w<CR>:!rubber --pdf --warn all %<CR>
 nnoremap <F7> :!mupdf %:r.pdf &<CR><CR>
+nnoremap <F8> :!md2pdf % & <CR>
 
 map <F5> :PluginInstall<CR>
 map <F2> :NERDTreeTabsToggle<CR>
 map <F9> :CtrlPMRU<CR>
-autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 set laststatus=2
 set pastetoggle=<F3>
-autocmd vimenter * if !argc() | NERDTree | endif
 autocmd FileType yaml set shiftwidth=2|set softtabstop=2
 set fillchars+=vert:┃
 set dir=~/.vimswap/_swap//
@@ -104,3 +104,4 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_php_phpcs_args='--standard=PSR2'
 let g:syntastic_html_tidy_exec = 'tidy'
+let g:syntastic_python_flake8_args='--max-line-length=99'

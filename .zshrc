@@ -47,6 +47,8 @@ export EDITOR=vim
 # Customize to your needs...
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 export PATH=$PATH:$HOME/scripts
+export PATH="$PATH:$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
+export PATH="$PATH:$HOME/dev/gopath/bin"
 export PANEL_FIFO="/tmp/panel-fifo"
 
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
@@ -54,3 +56,9 @@ alias mpd='mpd ~/.config/mpd/mpd.conf'
 export TMPDIR=/tmp
 
 alias kää='google-translate en fi'
+alias v='vagrant'
+alias vim='nvim'
+export GOPATH=~/dev/gopath
+alias fimutt='mutt -F ~/.mutt-fisle'
+alias gnw='/usr/share/git/workdir/git-new-workdir'
+alias open='xdg-open'
