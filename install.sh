@@ -18,7 +18,7 @@ echo "Enter username:"
 read input_user
 
 
-for i in .Xdefaults .vim .vimrc .tmux.conf .zshrc
+for i in .Xdefaults .vim .vimrc .tmux.conf .zshrc scripts
 do
     ln -s "$(pwd)/$i" "/home/$input_user/$i"
 done
