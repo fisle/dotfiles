@@ -4,9 +4,13 @@ URxvt*internalBorder: 10
 URxvt.urgentOnBell: true
 
 ! Clickable URLs
-URxvt.perl-ext-common: default,matcher
-URxvt.url-launcher: firefox
+URxvt.perl-ext-common: default,matcher,font-size
+URxvt.url-launcher: xdg-open
 URxvt.matcher.button: 1
+
+! Fontsize binds
+URxvt.keysym.A-Up: font-size:increase
+URxvt.keysym.A-Down: font-size:decrease
 
 ! Increase scrollback buffer
 URxvt*saveLines: 40000
