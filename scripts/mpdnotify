@@ -1,0 +1,443 @@
+#!/usr/bin/env python
+# Newer, shinier mpdnotify using Python!
+# Coded on the night of Thu, Jun 25, 2009 (10:15 PM to be exact!)
+# Last updated on Sat, Jun 14, 2010
+# Jasper St. Pierre <jstpierre@mecheye.net>
+
+# Requires:
+#   
+#   mpd >= 0.14
+#   
+#   pynotify
+#   
+#   pygtk (for icon finding)
+#
+#   PIL (for resizing icons/covers)
+#   
+#   configobj (for config reading)
+#     comes with bzr, you can also easy_install configobj
+#
+#   twisted
+#     should be standard on every linux install
+#   
+#   Optional: setproctitle
+#     This sets the process title for pgrep, ps aux, and killall.
+#     easy_install setproctitle
+
+import sys
+import os
+import cgi
+import pynotify
+import urllib2
+import functools
+
+try:
+    from lxml import etree
+except ImportError:
+    try:
+        # Python 2.5
+        import xml.etree.cElementTree as etree
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+            except ImportError:
+                try:
+                    # normal ElementTree install
+                    import elementtree.ElementTree as etree
+                except ImportError:
+                    sys.exit("Failed to import ElementTree from any known place")
+
+
+from PIL import Image
+from configobj import ConfigObj, Section
+from string import Template
+from socket import error as SocketError
+
+from mpd import MPDFactory
+from twisted.web import client, xmlrpc
+from twisted.internet import reactor, protocol, defer
+
+pretty_state = dict(play="Playing", pause="Paused", stop="Stopped")
+
+# string.Template subclass for parsing %artist% templates like
+# those used by mpc and foobar.
+class PercentTemplate(Template):
+    pattern = "%(?P<named>[_a-z][_a-z0-9]*)%"
+
+def str_fn_index(s, fn, arg):
+    if isinstance(arg, basestring):
+        arg = arg,
+    arg = iter(arg)
+    for i, m in enumerate(arg):
+        if fn(s.lower(), m.lower()):
+            return True, i
+    return False, None
+
+class CoverBackend(object):
+    def __init__(self, config):
+        pass
+    
+    def get_icon(self, opts):
+        return None, None
+
+    def get_filename(self, opts, filename=None):
+        return os.path.join(os.path.expanduser("~/.covers"),
+                            opts['artist'].replace("/", " "),
+                            "%s.jpg" % (filename if filename else \
+                                (opts.get("album", "no-album") or "no-album") \
+                                            .replace("/", " ")))
+
+    def resize_image(self, filename, size):
+        cover_small  = "%s.small%s" % os.path.splitext(filename)
+        
+        if not os.path.exists(cover_small):
+            try:
+                img = Image.open(filename)
+                img.thumbnail(size, Image.ANTIALIAS)
+                img.save(cover_small)
+            except IOError:
+                return None
+    
+        return cover_small
+
+class URLFetcherBackend(CoverBackend):
+    def get_icon(self, opts):
+        deferred = self._get_icon(opts)
+        if deferred:
+            deferred.addCallback(self.download_icon, opts)
+        return None, deferred
+
+    def download_icon(self, result, opts):
+        url, filename = result
+        if not url:
+            return None
+        filename = self.get_filename(opts, filename)
+        dirpath = os.path.dirname(filename)
+        if not os.path.exists(dirpath):
+            os.mkdir(dirpath)
+        deferred = client.downloadPage(url, filename)
+        deferred.addCallback(lambda value: filename)
+        return deferred
+
+class AmazonBackend(URLFetcherBackend):
+    URL = "http://images.amazon.com/images/P/%s.01._SCLZZZZZZZ_.jpg"
+    def __init__(self, config):
+        from pyaws import ecs
+        ecs.setLicenseKey(config['api_key'])
+        ecs.setSecretAccessKey(config["secret_key"])
+        self.ecs = ecs
+    
+    def _get_icon(self, opts):
+        if 'album' not in opts or 'artist' not in opts:
+            return
+        while True:
+            try:
+                results = self.ecs.ItemSearch(opts['album'], Artist=opts['artist'], SearchIndex="Music")
+                result = results[0]
+                return defer.succeed((self.URL % str(result.ASIN), None))
+            except KeyError, e:
+                return None
+            except self.ecs.InternalError:
+                time.sleep(0.5)
+            except self.ecs.SignatureDoesNotMatch:
+                return None
+    
+class LastFmBackend(URLFetcherBackend):
+    def __init__(self, config):
+        self.config = config
+        self.api = xmlrpc.Proxy("http://ws.audioscrobbler.com/2.0/")
+
+    def _get_icon(self, opts):
+
+        def get_largest(element):
+            for size in ("mega", "extralarge", "large", "medium", "small"):
+                result = element.find("./image[@size='%s']" % (size,))
+                if result is not None:
+                    return result.text
+        
+        def parse_track_results(result):
+            tree = etree.XML(result.replace('\\"', '"').encode("utf8"))
+            track = tree[0].find("trackmatches").find("track")
+            
+            if track is not None:
+                image = get_largest(track)
+                if image: return image, None
+            
+            deferred = self.api.callRemote("artist.search", dict(artist=opts['artist'], api_key=self.config['api_key']))
+            deferred.addCallback(parse_artist_results)
+            return deferred
+        
+        def parse_artist_results(result):
+            tree = etree.XML(result.replace('\\"', '"').encode("utf8"))
+            track = tree[0].find("artistmatches").find("artist")
+
+            if track is not None:
+                image = get_largest(track)
+                if image: return image, "artist_IMAGE"
+            return None, None
+
+        if 'title' not in opts or 'artist' not in opts:
+            return
+        
+        deferred = self.api.callRemote("track.search", dict(track=opts['title'], artist=opts['artist'], api_key=self.config['api_key']))
+        deferred.addCallback(parse_track_results)
+        return deferred
+    
+class MusicDirBackend(CoverBackend):
+    def __init__(self, config):
+        self.cover_names = make_list(config['search_names'])
+        self.cover_exts  = make_list(config['search_exts'])
+        self.music_path  = os.path.realpath(os.path.expanduser(config['music_path']))
+        
+    def get_icon(self, opts):
+        path   = os.path.dirname(os.path.join(self.music_path, opts['file']))
+        covers = dict()
+
+        for filename in os.listdir(path):
+            # This weights by the order in the cover_names, but also so that
+            # a shorter filename comes first, so we won't end up choosing
+            # cover.small.jpg
+            b1, i1 = str_fn_index(filename, str.startswith, self.cover_names)
+            b2, i2 = str_fn_index(filename, str.endswith, self.cover_exts)
+            if b1 and b2:
+                covers[(i1+i2)*100+len(filename)] = filename
+
+        if covers:
+            cover = sorted(covers.items())[0][1]
+            return os.path.join(path, cover), None
+
+        return None, None
+
+class CoversDirBackend(CoverBackend):
+    def get_icon(self, opts):
+        if 'artist' not in opts:
+            return None, None
+        
+        for filename in (None, "artist_IMAGE"):
+            cover = self.get_filename(opts, filename)
+            
+            if os.path.exists(cover):
+                return cover, None
+        
+        return None, None
+
+class GTKIconThemeBackend(CoverBackend):
+    def __init__(self, config):
+        import gtk
+        self.icon_theme = gtk.icon_theme_get_default()
+
+    def get_icon(self, opts):
+        if opts['icon']:
+            icon = self.icon_theme.lookup_icon(opts['icon'], 96, 0)
+            if icon:
+                return icon.get_filename(), None
+        return None, None
+
+BACKENDS = dict()
+BACKENDS["amazon"]   = AmazonBackend
+BACKENDS["musicdir"] = MusicDirBackend
+BACKENDS["covers"]   = CoversDirBackend
+BACKENDS["icons"]    = GTKIconThemeBackend
+BACKENDS["lastfm"]   = LastFmBackend
+
+def make_list(v):
+    return list(v) if isinstance(v, (list, tuple)) else [v]
+
+pynotify.init("mpdnotify")
+
+# Hack for string.Template and the KeyError problem.
+# Substitute a default instead of throwing a KeyError.
+def template_substitute_default(self, args, default=''):
+    while True:
+        try:
+            return self.substitute(args)
+        except KeyError, e:
+            args[e.args[0]] = default
+
+Template.substitute_default = template_substitute_default
+
+class MPDNotifyDaemon(object):
+
+    def __init__(self):
+        self.config = ConfigObj(os.path.expanduser("~/.mpdnotify.conf"))
+        covers_config = self.config['covers']
+        self.cover_size = tuple(int(n) for n in covers_config['size'])
+        self.backends = []
+        self.notification = None
+        self.callback = None
+
+        for backend in make_list(covers_config['backends']):
+            self.backends.append(BACKENDS[backend](self.config.get('covers:backend:'+backend, {})))
+
+    @defer.inlineCallbacks
+    def get_opts(self, joiner):
+        def parse_time(opts):
+            if "time" in opts:
+                elapsed, duration = (divmod(int(n), 60) for n in opts['time'].split(":"))
+                return dict(elapsed="%d:%02d" % elapsed, duration="%d:%02d" % duration)
+            return dict()
+
+        opts = dict()
+        
+        opts.update((yield self.client.status()))
+        opts.update(parse_time(opts))
+        opts.update((yield self.client.stats()))
+        opts.update((yield self.client.currentsong()))
+        opts.update(dict(pretty_state=pretty_state[opts['state']]))
+        
+        # If we have multiple tags, join them.
+        for key, val in opts.iteritems():
+            if isinstance(val, list):
+                opts[key] = joiner.join(val)
+        
+        defer.returnValue(opts)
+
+    @defer.inlineCallbacks
+    def display_notification(self, title, body, enable_covers=True, tags_joiner=', ', icon=None):
+        # And format our stuff.
+        title_format = PercentTemplate(title)
+        body_format  = PercentTemplate(body)
+        
+        opts = yield self.get_opts(tags_joiner)
+        opts['icon'] = icon
+
+        cover, async, final_image, deferred = None, None, None, None
+        
+        # Covers are enabled.
+        if enable_covers and "file" in opts:
+        
+            for backend in self.backends:
+                cover, deferred = backend.get_icon(opts)
+                
+                if cover or deferred:
+                    break
+                
+            if cover and os.path.exists(cover):
+                final_image = backend.resize_image(cover, self.cover_size)
+            
+        title = title_format.substitute_default(opts)
+        body  = cgi.escape(body_format.substitute_default(opts))
+        
+        # And launch the notification!
+        if self.notification is None:
+            self.notification = pynotify.Notification(title, body, final_image)
+        else:
+            self.notification.update(title, body, final_image)
+
+        self.notification.show()
+        self.needs_update = False
+        
+        if enable_covers and deferred:
+            self.needs_update = True
+            deferred.addCallback(self.update_notification, backend, title, body)
+
+    def update_notification(self, cover, backend, title, body):
+        if cover and self.needs_update:
+            cover = backend.resize_image(cover, self.cover_size)
+            self.notification.update(title, body, cover)
+            self.notification.show()
+
+    @defer.inlineCallbacks
+    def display_notification_config(self, config_name):
+        # If we don't want to display a notification,
+        # don't do so.
+        if "notification_%s" % config_name not in self.config:
+            return
+    
+        # Get our configuration
+        not_cfg = self.config["notification_%s" % config_name]
+
+        if "redirect" in not_cfg:
+            reasons = make_list(not_cfg["redirect"])
+            for reason in reasons:
+                yield self.display_notification_config(reason)
+        
+        title       = not_cfg.get("title_format", "")
+        body        = not_cfg.get("body_format",  "")
+        tags_joiner = not_cfg.get("tags_joiner",  ", ")
+        covers      = not_cfg.get("covers",       False)
+        icon        = not_cfg.get("icon",         "")
+
+        if title:
+            yield self.display_notification(title, body, covers, tags_joiner, icon)
+
+    @defer.inlineCallbacks
+    def idle_finished(self, reasons):
+        for reason in reasons:
+            yield self.display_notification_config(reason)
+        
+        deferred = self.client.idle()
+        deferred.addCallback(self.idle_finished)
+
+    def received_client(self, client):
+        self.client = client
+        if self.callback:
+            self.callback()
+
+    def run(self):
+        factory = MPDFactory()
+        factory.connectionMade = self.received_client
+        reactor.connectTCP(self.config['daemon']['host'], int(self.config['daemon']['port']), factory)
+        reactor.run()
+
+    @defer.inlineCallbacks
+    def display_notification_command(self, arg="", body="", icon="", *args):
+        if ("notification_%s" % arg) in self.config:
+            yield self.display_notification_config(arg)
+        else:
+            yield self.display_notification(arg, body, icon == "cover", "", icon)
+        reactor.stop()
+
+def help_command(daemon, command="", *args):
+    if command == "":
+        print "mpdnotify - Jasper St. Pierre <jstpierre@mecheye.net>"
+        print "email me or post comments on the wiki, or msg me on #mpd"
+        print "for feature suggestions for this program. I go by the alias magcius."
+        print ""
+        print "commands:"
+        print "  help    - display this message"
+        print "  display - put up a notification"
+    elif command == "display":
+        print "  display - put up a notification"
+        print "    display config_name"
+        print "      display a notification where notification_$config_name"
+        print "      is a format defined in ~/.mpdnotify.conf"
+        print ""
+        print "    display title [body] [icon]"
+        print "      display a notification having those title, body, and icon"
+        print '      use the name "cover" for the icon parameter if you want'
+        print "      to show cover art"
+    reactor.stop()
+
+COMMANDS = {
+    "help":     help_command,
+    "display":  MPDNotifyDaemon.display_notification_command,
+}
+
+if __name__ == "__main__":
+
+    try:
+        import setproctitle
+        setproctitle.setproctitle("mpdnotify")
+    except ImportError:
+        pass
+
+    daemon = MPDNotifyDaemon()
+
+    if len(sys.argv) > 1:
+        command = sys.argv[1].lower().lstrip("-")
+        if command in COMMANDS:
+            args = sys.argv[2:] if len(sys.argv) > 2 else ()
+            daemon.callback = functools.partial(COMMANDS[command], daemon, *args)
+        else:
+            print "no command by that name"
+            print "use the 'help' command for available commands"
+    else:
+        daemon.callback = functools.partial(daemon.idle_finished, ['startup'])
+
+    daemon.run()

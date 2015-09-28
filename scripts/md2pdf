@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import subprocess
+import markdown2
+import signal
+import sys
+import os
+
+TEMP_PATH = '/tmp/'
+
+
+def md2pdf(filename):
+    """
+    Convert md first into html file, then let xhtml2pdf render it to PDF.
+    Finally, open or refresh mupdf with newly generated PDF file.
+    """
+    md = open(filename, 'r').read()
+    print(md)
+    slug = os.path.splitext(filename)[0]
+    html = open('{}md-tmp.html'.format(TEMP_PATH), 'w')
+    html.write(markdown2.markdown(md))
+    html.close()
+    os.system("xhtml2pdf --encoding utf-8 {}md-tmp.html {}{}.pdf".format(
+        TEMP_PATH,
+        TEMP_PATH,
+        slug
+    ))
+    open_mupdf('{}{}.pdf'.format(TEMP_PATH, slug))
+
+
+def open_mupdf(filename):
+    """
+    Either opens mupdf with generated pdf, or sends SIGHUP to mupdf which
+    makes mupdf to reload the current file.
+    """
+    try:
+        pids = str(subprocess.check_output(['pgrep', 'mupdf']), 'utf-8')
+        pids = pids.split('\n')
+        for pid in pids:
+            if pid:
+                pid = int(pid)
+                os.kill(pid, signal.SIGHUP)
+    except subprocess.CalledProcessError:
+        os.system("mupdf {}".format(filename))
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        md2pdf(sys.argv[1])
+    else:
+        print("Usage: md2pdf markdown_file.md")
