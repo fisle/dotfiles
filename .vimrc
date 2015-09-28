@@ -72,6 +72,7 @@ Plugin 'wting/rust.vim'
 Plugin 'bpearson/vim-phpcs'
 Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'digitaltoad/vim-jade'
+Plugin 'mxw/vim-jsx'
 
 
 call vundle#end()
