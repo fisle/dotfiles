@@ -57,7 +57,6 @@ export TMPDIR=/tmp
 
 alias kää='google-translate en fi'
 alias v='vagrant'
-alias vim='nvim'
 export GOPATH=~/dev/gopath
 alias fimutt='mutt -F ~/.mutt-fisle'
 alias gnw='/usr/share/git/workdir/git-new-workdir'
