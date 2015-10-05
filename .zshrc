@@ -61,3 +61,4 @@ export GOPATH=~/dev/gopath
 alias fimutt='mutt -F ~/.mutt-fisle'
 alias gnw='/usr/share/git/workdir/git-new-workdir'
 alias open='xdg-open'
+alias vim='nvim'
