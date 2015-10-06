@@ -17,6 +17,9 @@ set incsearch
 set backspace=indent,eol,start
 filetype indent plugin on
 
+set scrolloff=1
+set sidescrolloff=5
+
 
 " Vundle
 set nocompatible
@@ -29,15 +32,12 @@ Plugin 'gmarik/Vundle.vim'
 " Plugarit tähän
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
-"Plugin 'jaxbot/brolink.vim'
 Plugin 'scrooloose/nerdtree'
-"Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ervandew/supertab'
 Plugin 'lepture/vim-jinja'
 Plugin 'xsbeats/vim-blade'
 Plugin 'burnettk/vim-angular'
 Plugin 'scrooloose/syntastic'
-"Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
@@ -47,6 +47,7 @@ Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/goyo.vim'
+Plugin 'rking/ag.vim'
 
 
 call vundle#end()
