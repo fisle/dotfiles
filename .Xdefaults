@@ -17,9 +17,6 @@ URxvt*saveLines: 40000
 
 *foreground: #DDCCBB
 
-! Brown BG
-!*background: #30251D
-
 ! Grey BG
 *background: #151515
 
