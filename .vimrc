@@ -14,6 +14,8 @@ syntax on
 set mouse=a
 set modeline
 set incsearch
+set ignorecase
+set smartcase
 set backspace=indent,eol,start
 filetype indent plugin on
 
@@ -45,9 +47,9 @@ Plugin 'wting/rust.vim'
 Plugin 'bpearson/vim-phpcs'
 Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'digitaltoad/vim-jade'
-Plugin 'mxw/vim-jsx'
 Plugin 'junegunn/goyo.vim'
 Plugin 'rking/ag.vim'
+Plugin 'vim-scripts/Tabmerge'
 
 
 call vundle#end()
@@ -91,7 +93,7 @@ nnoremap <C-n> :call NumberToggle()<CR>
 set laststatus=2
 
 autocmd FileType yaml set shiftwidth=2|set softtabstop=2
-autocmd FileType * if &filetype == 'python' | set colorcolumn=80 | endif
+autocmd FileType * if &filetype == 'python' | set colorcolumn=80,100 | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 set fillchars+=vert:┃
@@ -112,3 +114,4 @@ let g:syntastic_html_tidy_exec = 'tidy'
 let g:syntastic_python_flake8_args='--max-line-length=99'
 
 let NERDTreeIgnore = ['\.pyc$']
+hi Directory guifg=#FFFFFF ctermfg=4
