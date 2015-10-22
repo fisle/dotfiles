@@ -55,7 +55,7 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 alias mpd='mpd ~/.config/mpd/mpd.conf'
 export TMPDIR=/tmp
 
-alias kää='google-translate en fi'
+alias kää='translate en fi'
 alias v='vagrant'
 export GOPATH=~/dev/gopath
 alias fimutt='mutt -F ~/.mutt-fisle'

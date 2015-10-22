@@ -1,2 +1,3 @@
 #!/bin/bash
-while true; do vdirsyncer -v CRITICAL sync; clear; khal; sleep 900; done
+#while true; do vdirsyncer -v CRITICAL sync; clear; khal; sleep 900; done
+watch -n30 --color khal
