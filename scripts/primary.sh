@@ -4,3 +4,4 @@ if (xrandr | grep "HDMI1 disconnected"); then
 else
     xrandr --output HDMI1 --auto --primary --output eDP1 --auto --right-of HDMI1
 fi
+nitrogen --restore
