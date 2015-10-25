@@ -2,8 +2,8 @@
 
 
 cd /tmp
-LATESTGAJIM=$(curl 'https://eddykk.com/api/latest.php?service=smile&type=gajim' | jsawk 'return this.content')
-wget https://eddykk.com/smiles/$LATESTGAJIM
+LATESTGAJIM=$(curl https://eddykk.com/api/page/gajim | cut -d '"' -f2)
+wget https://eddykk.com/smiley/gajim/$LATESTGAJIM
 unzip $LATESTGAJIM
 filename=$(basename "$LATESTGAJIM")
 filename="${filename%.*}"
@@ -11,8 +11,8 @@ gksudo mv $filename /usr/share/gajim/data/emoticons/
 rm $LATESTGAJIM
 
 
-LATESTPIDGIN=$(curl 'https://eddykk.com/api/latest.php?service=smile&type=pidgin' | jsawk 'return this.content')
-wget https://eddykk.com/smiles/$LATESTPIDGIN
+LATESTPIDGIN=$(curl https://eddykk.com/api/page/pidgin | cut -d '"' -f2)
+wget https://eddykk.com/smiley/pidgin/$LATESTPIDGIN
 unzip $LATESTPIDGIN
 filename=$(basename "$LATESTPIDGIN")
 filename="${filename%.*}"
