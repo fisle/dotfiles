@@ -112,6 +112,7 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_php_phpcs_args='--standard=PSR2'
 let g:syntastic_html_tidy_exec = 'tidy'
 let g:syntastic_python_flake8_args='--max-line-length=99'
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 
 let NERDTreeIgnore = ['\.pyc$']
 hi Directory guifg=#FFFFFF ctermfg=4
