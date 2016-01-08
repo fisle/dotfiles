@@ -50,6 +50,7 @@ Plugin 'digitaltoad/vim-jade'
 Plugin 'junegunn/goyo.vim'
 Plugin 'rking/ag.vim'
 Plugin 'vim-scripts/Tabmerge'
+Plugin 'editorconfig/editorconfig-vim'
 
 
 call vundle#end()
@@ -104,6 +105,7 @@ set backupdir=~/.vimswap/_backup/,~/tmp,.
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+set cursorline
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
