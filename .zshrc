@@ -63,3 +63,21 @@ alias gnw='/usr/share/git/workdir/git-new-workdir'
 alias open='xdg-open'
 alias vim='nvim'
 alias ya='yaourt'
+
+function nr()
+{
+    if [ -e ./bin/www ]
+    then
+        DEBUG=so:*,mortar:* npm start
+    else
+        echo "No Node.js (Express) project root exist in this directory"
+    fi
+}
+
+alias gac='gco $(gba | fzf)'
+alias filu='vim $(fzf)'
+
+function ggpf()
+{
+    git push origin "$(current_branch)" --force
+}
