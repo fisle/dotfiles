@@ -31,19 +31,16 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
-" Plugarit tähän
+" Plugarit
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ervandew/supertab'
 Plugin 'lepture/vim-jinja'
-Plugin 'xsbeats/vim-blade'
-Plugin 'burnettk/vim-angular'
 Plugin 'scrooloose/syntastic'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'wting/rust.vim'
 Plugin 'bpearson/vim-phpcs'
 Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'digitaltoad/vim-jade'
@@ -51,6 +48,9 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'rking/ag.vim'
 Plugin 'vim-scripts/Tabmerge'
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'Shutnik/jshint2.vim'
+Plugin 'darthmall/vim-vue'
 
 
 call vundle#end()
@@ -115,6 +115,7 @@ let g:syntastic_php_phpcs_args='--standard=PSR2'
 let g:syntastic_html_tidy_exec = 'tidy'
 let g:syntastic_python_flake8_args='--max-line-length=99'
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+let g:syntastic_javascript_checkers = ['jshint']
 
 let NERDTreeIgnore = ['\.pyc$']
 hi Directory guifg=#FFFFFF ctermfg=4

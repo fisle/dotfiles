@@ -74,10 +74,11 @@ function nr()
     fi
 }
 
-alias gac='gco $(gba | fzf)'
+alias gac='gco $(gba | sed "s/remotes\/origin\///g" | grep -Ev "(HEAD|\*)"  | sort | uniq | fzf)'
 alias filu='vim $(fzf)'
 
 function ggpf()
 {
     git push origin "$(current_branch)" --force
 }
+alias fr='friends --filename=/home/dflies/friends.md'

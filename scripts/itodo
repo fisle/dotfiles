@@ -1,2 +1,2 @@
 #!/bin/bash
-watch -n30 --color todo
+watch -n10 --color todo
