@@ -22,6 +22,10 @@ for i in .Xdefaults .vim .vimrc .tmux.conf .zshrc scripts
 do
     ln -s "$(pwd)/$i" "/home/$input_user/$i"
 done
+
+mkdir -p /home/$input_user/.config/dunst
+ln -s "$(pwd)/dunstrc" "/home/$input_user/.config/dunst/dunstrc"
+
 echo "Symlinks created for user $input_user"
 
 if [ $ROOT -eq 1 ]; then
