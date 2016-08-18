@@ -103,6 +103,7 @@ set fillchars+=vert:┃
 set dir=~/.vimswap/_swap//
 set backup
 set backupdir=~/.vimswap/_backup/,~/tmp,.
+set backupcopy=yes
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
