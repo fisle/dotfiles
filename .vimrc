@@ -22,6 +22,7 @@ filetype indent plugin on
 set scrolloff=1
 set sidescrolloff=5
 
+let no_autopep8_maps = 1
 
 " Vundle
 set nocompatible
@@ -51,6 +52,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jelera/vim-javascript-syntax'
 Plugin 'Shutnik/jshint2.vim'
 Plugin 'darthmall/vim-vue'
+Plugin 'tell-k/vim-autopep8'
 
 
 call vundle#end()
@@ -118,6 +120,10 @@ let g:syntastic_html_tidy_exec = 'tidy'
 let g:syntastic_python_flake8_args='--max-line-length=99'
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 let g:syntastic_javascript_checkers = ['jshint', 'eslint']
+
+let g:autopep8_ignore=''
+let g:autopep8_max_line_length=99
+let g:autopep8_aggressive=1
 
 let NERDTreeIgnore = ['\.pyc$']
 hi Directory guifg=#FFFFFF ctermfg=4
