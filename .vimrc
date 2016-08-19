@@ -74,8 +74,8 @@ endfunc
 let @f = 'f,a€kD'
 
 function! Python2()
+    "let g:syntastic_python_checkers = ['flake8-python2']
     let g:syntastic_python_python_exec = '/usr/bin/python2'
-    let g:syntastic_python_checkers = ['flake8-python2']
     edit %
 endfunc
 
@@ -120,6 +120,7 @@ let g:syntastic_html_tidy_exec = 'tidy'
 let g:syntastic_python_flake8_args='--max-line-length=99'
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 let g:syntastic_javascript_checkers = ['jshint', 'eslint']
+let g:syntastic_go_checkers = ['go', 'gofmt', 'golint', 'gotype', 'govet']
 
 let g:autopep8_ignore=''
 let g:autopep8_max_line_length=99
