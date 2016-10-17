@@ -63,17 +63,7 @@ alias fimutt='mutt -F ~/.mutt-fisle'
 alias gnw='/usr/share/git/workdir/git-new-workdir'
 alias open='xdg-open'
 alias vim='nvim'
-alias ya='yaourt'
-
-function nr()
-{
-    if [ -e ./bin/www ]
-    then
-        DEBUG=so:*,mortar:* npm start
-    else
-        echo "No Node.js (Express) project root exist in this directory"
-    fi
-}
+alias ya='pacaur'
 
 alias gac='gco $(gba | sed "s/remotes\/origin\///g" | grep -Ev "(HEAD|\*)"  | sort | uniq | fzf)'
 alias filu='vim $(fzf)'
