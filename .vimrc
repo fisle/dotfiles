@@ -117,6 +117,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_php_phpcs_args='--standard=PSR2'
 let g:syntastic_html_tidy_exec = 'tidy'
+let g:syntastic_python_checkers = ['flake8', 'python']
 let g:syntastic_python_flake8_args='--max-line-length=99'
 let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 let g:syntastic_javascript_checkers = ['jshint', 'eslint']
@@ -128,3 +129,13 @@ let g:autopep8_aggressive=1
 
 let NERDTreeIgnore = ['\.pyc$']
 hi Directory guifg=#FFFFFF ctermfg=4
+
+" set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
+" autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
+
+let g:goyo_width=100
+let g:goyo_height=90
+function! s:goyo_enter()
+    GitGutterEnable
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
