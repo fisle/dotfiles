@@ -8,6 +8,7 @@ fi
 
 FIX=$1
 if [ $COMMAND == "playerctl" ]; then
+    COMMAND="playerctl --player=spotify"
     if [ $1 == "prev" ]; then
         FIX="previous"
     fi

@@ -62,4 +62,4 @@ if ARGV.first == "up" then p.volume_up end
 if ARGV.first == "down" then p.volume_down end
 if ARGV.first == "toggle" then p.mute_toggle end
 `pkill -RTMIN+10 i3blocks`
-`~/.i3/get_volume.sh`
+#`~/.i3/get_volume.sh`
