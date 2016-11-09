@@ -60,6 +60,7 @@ sudo pacaur -S \
     volnoti \
     wget \
     xclip \
+    xdotool \
     xorg-apps \
     xorg-server \
     xorg-server-utils \
