@@ -38,7 +38,9 @@ sudo pacaur -S \
     phpmd \
     ponymix \
     pulseaudio \
+    python-virtualenv \
     python2-flake8 \
+    python2-virtualenv \
     rxvt-unicode \
     shellcheck \
     spotify \
