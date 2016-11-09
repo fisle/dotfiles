@@ -53,6 +53,7 @@ Plugin 'jelera/vim-javascript-syntax'
 Plugin 'Shutnik/jshint2.vim'
 Plugin 'darthmall/vim-vue'
 Plugin 'tell-k/vim-autopep8'
+Plugin 'majutsushi/tagbar'
 
 
 call vundle#end()
@@ -93,6 +94,7 @@ map <F9> :CtrlPMRU<CR>
 nnoremap <F12> :call Python2()<CR>
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
+nmap <F10> :TagbarToggle<CR>
 
 set laststatus=2
 
