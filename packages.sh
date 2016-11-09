@@ -31,6 +31,8 @@ sudo pacaur -S \
     mupdf \
     net-tools \
     nitrogen \
+    nodejs \
+    npm \
     numix-themes \
     owncloud-client \
     pavucontrol \
