@@ -54,6 +54,7 @@ Plugin 'Shutnik/jshint2.vim'
 Plugin 'darthmall/vim-vue'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'majutsushi/tagbar'
+Plugin 'evidens/vim-twig'
 
 
 call vundle#end()
