@@ -39,7 +39,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'ervandew/supertab'
 Plugin 'lepture/vim-jinja'
 Plugin 'scrooloose/syntastic'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bpearson/vim-phpcs'
@@ -55,6 +55,8 @@ Plugin 'posva/vim-vue'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'majutsushi/tagbar'
 Plugin 'evidens/vim-twig'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
 
 
 call vundle#end()
