@@ -83,21 +83,21 @@ function! Python2()
     edit %
 endfunc
 
-" Latex stuff
-nnoremap <F6> :w<CR>:!rubber --pdf --warn all %<CR>
-nnoremap <F7> :!mupdf %:r.pdf &<CR><CR>
-nnoremap <F8> :!md2pdf % & <CR>
-
 " Keybinds
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
 map <F4> <Esc>:registers<CR>
 map <F5> :PluginInstall<CR>
+nnoremap <F6> :w<CR>:!rubber --pdf --warn all %<CR>
+nnoremap <F7> :!mupdf %:r.pdf &<CR><CR>
+nnoremap <F8> :!md2pdf % & <CR>
 map <F9> :CtrlPMRU<CR>
+nmap <F10> :TagbarToggle<CR>
+nmap <F11> :CtrlPTag<CR>
 nnoremap <F12> :call Python2()<CR>
+
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
-nmap <F10> :TagbarToggle<CR>
 
 set laststatus=2
 
