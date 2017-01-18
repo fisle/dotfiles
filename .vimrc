@@ -57,6 +57,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'evidens/vim-twig'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
+Plugin 'ekalinin/Dockerfile.vim'
 
 
 call vundle#end()

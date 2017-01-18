@@ -13,6 +13,7 @@ sudo pacaur -S \
     dunst \
     editorconfig-core-c \
     eslint \
+    evolution \
     file-roller \
     firefox \
     flake8 \

@@ -17,6 +17,7 @@ export PATH=$PATH
 alias v='vagrant'
 alias ya='pacaur'
 alias open='xdg-open'
+alias vim='nvim'
 alias gac='gco $(gba | sed "s/remotes\/origin\///g" | grep -Ev "(HEAD|\*)"  | sort | uniq | fzf)'
 alias filu='vim $(fzf)'
 
