@@ -4,7 +4,6 @@ set encoding=utf-8
 set enc=utf-8
 set termencoding=utf-8
 
-
 set expandtab
 set shiftwidth=4
 set softtabstop=4
@@ -37,8 +36,9 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ervandew/supertab'
+"Plugin 'Shougo/deoplete.nvim'
 Plugin 'lepture/vim-jinja'
-Plugin 'scrooloose/syntastic'
+Plugin 'w0rp/ale'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
@@ -78,11 +78,21 @@ endfunc
 
 let @f = 'f,a€kD'
 
-function! Python2()
-    "let g:syntastic_python_checkers = ['flake8-python2']
-    let g:syntastic_python_python_exec = '/usr/bin/python2'
-    edit %
-endfunc
+set statusline+=%{ALEGetStatusLine()}
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\   'python': ['flake8', 'python'],
+\   'php': ['php', 'phpcs', 'phpmd'],
+\   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
+\   'bash': ['shellcheck'],
+\}
+let g:ale_php_phpcs_standard = 'PSR2'
+let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
+let g:ale_open_list = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Keybinds
 map <F2> :NERDTreeToggle<CR>
@@ -113,20 +123,9 @@ set backup
 set backupdir=~/.vimswap/_backup/,~/tmp,.
 set backupcopy=yes
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+
 set statusline+=%*
 set cursorline
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_php_phpcs_args='--standard=PSR2'
-let g:syntastic_html_tidy_exec = 'tidy'
-let g:syntastic_python_checkers = ['flake8', 'python']
-let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-let g:syntastic_javascript_checkers = ['jshint', 'eslint']
-let g:syntastic_go_checkers = ['go', 'gofmt', 'golint', 'gotype', 'govet']
 
 let g:autopep8_ignore=''
 let g:autopep8_max_line_length=99
@@ -172,3 +171,4 @@ let g:tagbar_type_go = {
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
     \ }
+" let g:deoplete#enable_at_startup = 1
