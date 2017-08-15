@@ -1,1 +1,0 @@
-/home/dflies/.i3/nowplaying.sh

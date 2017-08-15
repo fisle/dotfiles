@@ -35,8 +35,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'ervandew/supertab'
-"Plugin 'Shougo/deoplete.nvim'
+Plugin 'Shougo/deoplete.nvim'
 Plugin 'lepture/vim-jinja'
 Plugin 'w0rp/ale'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -50,7 +49,7 @@ Plugin 'rking/ag.vim'
 Plugin 'vim-scripts/Tabmerge'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'jelera/vim-javascript-syntax'
-Plugin 'Shutnik/jshint2.vim'
+Plugin 'pangloss/vim-javascript'
 Plugin 'posva/vim-vue'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'majutsushi/tagbar'
@@ -58,6 +57,11 @@ Plugin 'evidens/vim-twig'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
 Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'saltstack/salt-vim'
+Plugin 'jwalton512/vim-blade'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'mxw/vim-jsx'
 
 
 call vundle#end()
@@ -79,8 +83,10 @@ endfunc
 let @f = 'f,a€kD'
 
 set statusline+=%{ALEGetStatusLine()}
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
 let g:ale_linters = {
-\   'javascript': ['eslint'],
+\   'javascript': ['eslint', 'prettier'],
 \   'python': ['flake8', 'python'],
 \   'php': ['php', 'phpcs', 'phpmd'],
 \   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
@@ -88,9 +94,7 @@ let g:ale_linters = {
 \}
 let g:ale_php_phpcs_standard = 'PSR2'
 let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
-let g:ale_open_list = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
+
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
@@ -98,14 +102,17 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
 map <F4> <Esc>:registers<CR>
-map <F5> :PluginInstall<CR>
 nnoremap <F6> :w<CR>:!rubber --pdf --warn all %<CR>
 nnoremap <F7> :!mupdf %:r.pdf &<CR><CR>
 nnoremap <F8> :!md2pdf % & <CR>
 map <F9> :CtrlPMRU<CR>
 nmap <F10> :TagbarToggle<CR>
 nmap <F11> :CtrlPTag<CR>
-nnoremap <F12> :call Python2()<CR>
+" Use FZF instead of CtrlP
+let g:ctrlp_cmd = 'Files'
+nnoremap <C-l> :CtrlPBuffer<CR>
+map <F1> <del>
+map! <F1> <del>
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
@@ -114,6 +121,9 @@ set laststatus=2
 
 autocmd FileType yaml set shiftwidth=2|set softtabstop=2
 autocmd FileType * if &filetype == 'python' | set colorcolumn=80,100 | endif
+autocmd FileType * if &filetype == 'javascript' | set colorcolumn=80,100 | endif
+autocmd FileType * if &filetype == 'php' | set colorcolumn=80,100 | endif
+autocmd FileType * if &filetype == 'go' | set colorcolumn=80,100 | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 set fillchars+=vert:â”ƒ
@@ -132,7 +142,7 @@ let g:autopep8_max_line_length=99
 let g:autopep8_aggressive=1
 
 let NERDTreeIgnore = ['\.pyc$']
-hi Directory guifg=#FFFFFF ctermfg=4
+" hi Directory guifg=#FFFFFF ctermfg=4
 
 " set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
 " autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
@@ -171,4 +181,7 @@ let g:tagbar_type_go = {
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
     \ }
-" let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+
+let g:jsx_ext_required = 0 " allow jsx in js files

@@ -44,7 +44,8 @@ plugins=(git extract autoenv)
 
 source $ZSH/oh-my-zsh.sh
 
-export EDITOR=vim
+export EDITOR=nvim
+alias vim='nvim'
 # Customize to your needs...
 export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 eval "$(dircolors -b $HOME/.dircolors)"
