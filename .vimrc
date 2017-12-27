@@ -7,7 +7,8 @@ set termencoding=utf-8
 set expandtab
 set shiftwidth=4
 set softtabstop=4
-colorscheme monokai
+"colorscheme monokai
+colorscheme jellybeans
 
 syntax on
 set mouse=a
@@ -62,6 +63,7 @@ Plugin 'jwalton512/vim-blade'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mxw/vim-jsx'
+Plugin 'maximbaz/lightline-ale'
 
 
 call vundle#end()
@@ -95,6 +97,24 @@ let g:ale_linters = {
 let g:ale_php_phpcs_standard = 'PSR2'
 let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
 
+let g:lightline = { 'colorscheme': 'powerline' }
+let g:lightline.component_expand = {
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \ }
+let g:lightline.active = {
+    \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
+    \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']]
+    \ }
+"let g:ale_set_loclist = 0
+"let g:ale_set_quickfix = 1
+"let g:ale_open_list = 1
+
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
@@ -113,6 +133,8 @@ let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
 map <F1> <del>
 map! <F1> <del>
+"map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
+command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
@@ -128,10 +150,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 set fillchars+=vert:â”ƒ
 
-set dir=~/.vimswap/_swap//
-set backup
-set backupdir=~/.vimswap/_backup/,~/tmp,.
-set backupcopy=yes
+" set dir=~/.vimswap/_swap//
+" set backup
+" set backupdir=~/.vimswap/_backup/,~/tmp,.
+" set backupcopy=yes
+set nobackup
+set noswapfile
+
 set statusline+=%#warningmsg#
 
 set statusline+=%*

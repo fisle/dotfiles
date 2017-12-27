@@ -6,6 +6,7 @@ plugins=(git extract)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+export TERMINAL=alacritty
 export EDITOR=nvim
 export GOPATH=$HOME/dev/gopath
 export GOBIN=$GOPATH/bin
@@ -14,6 +15,7 @@ PATH="$PATH:$HOME/scripts"
 PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.config/composer/vendor/bin"
 PATH="$PATH:$HOME/.npm/bin"
+PATH="$PATH:$HOME/.cargo/bin"
 export PATH=$PATH
 
 alias v='vagrant'
