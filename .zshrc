@@ -18,6 +18,11 @@ PATH="$PATH:$HOME/.npm/bin"
 PATH="$PATH:$HOME/.cargo/bin"
 export PATH=$PATH
 
+
+setopt HIST_IGNORE_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+
 alias v='vagrant'
 alias ya='pacaur'
 alias open='xdg-open'
@@ -42,3 +47,18 @@ function t()
     tmux split-window -h -p 37
     tmux rename-window $name
 }
+
+function p()
+{
+    search=$(find ~/dev -maxdepth 2 -type d)
+    result=$(echo $search | fzf)
+    cd $result || return
+    name=${PWD##*/}
+    tmux rename-window $name
+}
+
+function mm () {
+    v ssh -c "m $@"
+}
+alias mmr='v ssh -c "mr"' 
+alias gremove='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'

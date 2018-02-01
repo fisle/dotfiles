@@ -64,6 +64,9 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'maximbaz/lightline-ale'
+" Plugin 'vim-scripts/TaskList.vim'
+Plugin 'fisle/vim-no-fixme'
+Plugin 'Vimjas/vim-python-pep8-indent'
 
 
 call vundle#end()
@@ -102,13 +105,15 @@ let g:lightline.component_expand = {
       \  'linter_warnings': 'lightline#ale#warnings',
       \  'linter_errors': 'lightline#ale#errors',
       \  'linter_ok': 'lightline#ale#ok',
+      \  'nofixme': 'nofixme#amount',
       \ }
 let g:lightline.component_type = {
       \     'linter_warnings': 'warning',
       \     'linter_errors': 'error',
+      \     'nofixme': 'warning',
       \ }
 let g:lightline.active = {
-    \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
+    \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
     \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']]
     \ }
 "let g:ale_set_loclist = 0
@@ -135,6 +140,7 @@ map <F1> <del>
 map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
+command Json :execute '%!python -m json.tool' | w
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
