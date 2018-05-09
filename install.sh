@@ -4,6 +4,8 @@ if [[ $EUID -ne 0 ]]; then
     ROOT=0
 fi
 
+current_folder=$(pwd)
+
 echo "Hello! I will install zsh, tmux and vim configs for user of your choice"
 if [ $ROOT -eq 1 ]
 then
@@ -39,5 +41,8 @@ if [ $ROOT -eq 1 ]; then
     done
     echo "Symlinks created for root"
 fi
+
+sudo ln -s "$current_folder/00-keyboard.conf" /etc/X11/xorg.conf.d/00-keyboard.conf
+sudo ln -s "$current_folder/30-natural-scrolling-tapping.conf" /etc/X11/xorg.conf.d/30-natural-scrolling-tapping.conf
 
 echo "All done! Quitting."

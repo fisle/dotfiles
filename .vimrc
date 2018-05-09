@@ -114,7 +114,7 @@ let g:lightline.component_type = {
       \ }
 let g:lightline.active = {
     \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
-    \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']]
+    \ 'left': [['mode', 'paste'], ['readonly', 'relativepath', 'modified']]
     \ }
 "let g:ale_set_loclist = 0
 "let g:ale_set_quickfix = 1
@@ -141,6 +141,7 @@ map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 command Json :execute '%!python -m json.tool' | w
+command Todo :edit ~/dev/todo.md
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-n> :call NumberToggle()<CR>
