@@ -1,14 +1,12 @@
 set t_Co=256
 set fileencoding=utf-8
 set encoding=utf-8
-set enc=utf-8
 set termencoding=utf-8
 
 set expandtab
 set shiftwidth=4
 set softtabstop=4
-"colorscheme monokai
-colorscheme jellybeans
+set termguicolors
 
 syntax on
 set mouse=a
@@ -37,41 +35,66 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Shougo/deoplete.nvim'
-Plugin 'lepture/vim-jinja'
-Plugin 'w0rp/ale'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'bpearson/vim-phpcs'
-Plugin 'gorodinskiy/vim-coloresque'
-Plugin 'digitaltoad/vim-jade'
-Plugin 'junegunn/goyo.vim'
 Plugin 'rking/ag.vim'
 Plugin 'vim-scripts/Tabmerge'
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'pangloss/vim-javascript'
-Plugin 'posva/vim-vue'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'majutsushi/tagbar'
-Plugin 'evidens/vim-twig'
-Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-easytags'
-Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'saltstack/salt-vim'
-Plugin 'jwalton512/vim-blade'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-Plugin 'mxw/vim-jsx'
-Plugin 'maximbaz/lightline-ale'
-" Plugin 'vim-scripts/TaskList.vim'
 Plugin 'fisle/vim-no-fixme'
-Plugin 'Vimjas/vim-python-pep8-indent'
+Plugin 'xolox/vim-misc'
 
+" Linters/etc
+Plugin 'w0rp/ale'
+Plugin 'stsewd/isort.nvim'
+Plugin 'maximbaz/lightline-ale'
+Plugin 'bpearson/vim-phpcs'
+Plugin 'autozimu/LanguageClient-neovim'
+
+" Colors
+Plugin 'joshdick/onedark.vim'
+Plugin 'morhetz/gruvbox'
+
+" Sugar
+Plugin 'gorodinskiy/vim-coloresque'
+
+" Best language pack (syntax etc)
+Plugin 'sheerun/vim-polyglot'
+
+" Syntax - DEPRECATED Use polyglot
+" Plugin 'lepture/vim-jinja'
+" Plugin 'digitaltoad/vim-jade'
+" Plugin 'jelera/vim-javascript-syntax'
+" Plugin 'pangloss/vim-javascript'
+" Plugin 'posva/vim-vue'
+" Plugin 'evidens/vim-twig'
+" Plugin 'ekalinin/Dockerfile.vim'
+" Plugin 'saltstack/salt-vim'
+" Plugin 'jwalton512/vim-blade'
+" Plugin 'maxmellon/vim-jsx-pretty'
+" Plugin 'Vimjas/vim-python-pep8-indent'
+" Plugin 'alampros/vim-styled-jsx'
+" Plugin 'vim-python/python-syntax'
+" Plugin 'martinda/Jenkinsfile-vim-syntax'
 
 call vundle#end()
 filetype plugin indent on
 " vundle end
+
+let g:python_highlight_all = 1
+
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR><Paste>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+let g:LanguageClient_diagnosticsEnable = 0
+
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+\ }
 
 " Custom functions
 cmap w!! w !sudo tee > /dev/null %
@@ -85,20 +108,25 @@ function! NumberToggle()
     endif
 endfunc
 
-let @f = 'f,a�kD'
+let @f = 'f,akD'
 
 set statusline+=%{ALEGetStatusLine()}
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+"\   'python': ['flake8', 'pylint', 'python'],
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier'],
-\   'python': ['flake8', 'python'],
 \   'php': ['php', 'phpcs', 'phpmd'],
 \   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
 \   'bash': ['shellcheck'],
 \}
+
+let g:ale_fixers = {}
+let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_javascript_prettier_use_local_config = 1
+
 let g:ale_php_phpcs_standard = 'PSR2'
-let g:ale_statusline_format = ['� %d', '� %d', '� ok']
+let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
 
 let g:lightline = { 'colorscheme': 'powerline' }
 let g:lightline.component_expand = {
@@ -116,9 +144,6 @@ let g:lightline.active = {
     \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
     \ 'left': [['mode', 'paste'], ['readonly', 'relativepath', 'modified']]
     \ }
-"let g:ale_set_loclist = 0
-"let g:ale_set_quickfix = 1
-"let g:ale_open_list = 1
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -136,6 +161,7 @@ nmap <F11> :CtrlPTag<CR>
 " Use FZF instead of CtrlP
 let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
+nnoremap <C-k> :CtrlPTag<CR>
 map <F1> <del>
 map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
@@ -156,16 +182,12 @@ autocmd FileType * if &filetype == 'go' | set colorcolumn=80,100 | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 set fillchars+=vert:┃
+"set fillchars+=vert:â
 
-" set dir=~/.vimswap/_swap//
-" set backup
-" set backupdir=~/.vimswap/_backup/,~/tmp,.
-" set backupcopy=yes
 set nobackup
 set noswapfile
 
 set statusline+=%#warningmsg#
-
 set statusline+=%*
 set cursorline
 
@@ -176,16 +198,7 @@ let g:autopep8_aggressive=1
 let NERDTreeIgnore = ['\.pyc$']
 " hi Directory guifg=#FFFFFF ctermfg=4
 
-" set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
-" autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
-
-let g:goyo_width=100
-let g:goyo_height=90
-function! s:goyo_enter()
-    GitGutterEnable
-endfunction
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-
+let g:easytags_async = 1
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -214,6 +227,26 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
     \ }
 let g:deoplete#enable_at_startup = 1
+" Disable the candidates in Comment/String syntaxes.
+call deoplete#custom#source('_',
+            \ 'disabled_syntaxes', ['Comment', 'String'])
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" let g:deoplete#sources = {}
+" let g:deoplete#sources.cpp = ['LanguageClient']
+" let g:deoplete#sources.python = ['LanguageClient']
+" let g:deoplete#sources.python3 = ['LanguageClient']
+" let g:deoplete#sources.rust = ['LanguageClient']
+" let g:deoplete#sources.c = ['LanguageClient']
+" let g:deoplete#sources.vim = ['vim']
+
 let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 
 let g:jsx_ext_required = 0 " allow jsx in js files
+let g:vim_jsx_pretty_colorful_config = 1
+
+set background=dark
+"colorscheme monokai
+"colorscheme jellybeans
+"colorscheme gruvbox
+colorscheme onedark

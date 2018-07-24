@@ -16,6 +16,7 @@ PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
 PATH="$PATH:$HOME/.config/composer/vendor/bin"
 PATH="$PATH:$HOME/.npm/bin"
 PATH="$PATH:$HOME/.cargo/bin"
+PATH="$PATH:$HOME/.bin"
 export PATH=$PATH
 
 
@@ -24,6 +25,7 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 
 alias v='vagrant'
+alias cat='bat'
 alias ya='pacaur'
 alias open='xdg-open'
 alias vim='nvim'
