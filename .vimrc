@@ -1,4 +1,6 @@
 set t_Co=256
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 set fileencoding=utf-8
 set encoding=utf-8
 set termencoding=utf-8
@@ -65,6 +67,7 @@ Plugin 'gorodinskiy/vim-coloresque'
 
 " Best language pack (syntax etc)
 Plugin 'sheerun/vim-polyglot'
+Plugin 'alampros/vim-styled-jsx'
 
 " Syntax - DEPRECATED Use polyglot
 " Plugin 'lepture/vim-jinja'
@@ -78,7 +81,6 @@ Plugin 'sheerun/vim-polyglot'
 " Plugin 'jwalton512/vim-blade'
 " Plugin 'maxmellon/vim-jsx-pretty'
 " Plugin 'Vimjas/vim-python-pep8-indent'
-" Plugin 'alampros/vim-styled-jsx'
 " Plugin 'vim-python/python-syntax'
 " Plugin 'martinda/Jenkinsfile-vim-syntax'
 
@@ -161,7 +163,7 @@ nmap <F11> :CtrlPTag<CR>
 " Use FZF instead of CtrlP
 let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
-nnoremap <C-k> :CtrlPTag<CR>
+nnoremap <C-h> :CtrlPTag<CR>
 map <F1> <del>
 map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
