@@ -17,6 +17,7 @@ PATH="$PATH:$HOME/.config/composer/vendor/bin"
 PATH="$PATH:$HOME/.npm/bin"
 PATH="$PATH:$HOME/.cargo/bin"
 PATH="$PATH:$HOME/.bin"
+PATH="$PATH:$HOME/.local/bin"
 export PATH=$PATH
 
 
@@ -64,3 +65,10 @@ function mm () {
 }
 alias mmr='v ssh -c "mr"' 
 alias gremove='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'
+
+scrot () {
+    date=$(date '+%Y-%m_%d-%H-%M-%S')
+    filename="$HOME/Pictures/Screenshots/Screenshot-$date.png"
+    maim "$@" "$filename" && echo "$filename" | xclip
+}
+

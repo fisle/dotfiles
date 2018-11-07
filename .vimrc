@@ -36,7 +36,8 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'Shougo/deoplete.nvim'
+" Plugin 'Shougo/deoplete.nvim'
+Plugin 'zxqfl/tabnine-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
@@ -70,7 +71,7 @@ Plugin 'sheerun/vim-polyglot'
 Plugin 'alampros/vim-styled-jsx'
 
 " Syntax - DEPRECATED Use polyglot
-" Plugin 'lepture/vim-jinja'
+Plugin 'lepture/vim-jinja'
 " Plugin 'digitaltoad/vim-jade'
 " Plugin 'jelera/vim-javascript-syntax'
 " Plugin 'pangloss/vim-javascript'
@@ -230,8 +231,8 @@ let g:tagbar_type_go = {
     \ }
 let g:deoplete#enable_at_startup = 1
 " Disable the candidates in Comment/String syntaxes.
-call deoplete#custom#source('_',
-            \ 'disabled_syntaxes', ['Comment', 'String'])
+" call deoplete#custom#source('_',
+"             \ 'disabled_syntaxes', ['Comment', 'String'])
 " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " let g:deoplete#sources = {}
