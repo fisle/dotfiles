@@ -1,5 +1,5 @@
 set t_Co=256
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 set fileencoding=utf-8
 set encoding=utf-8
@@ -36,7 +36,9 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'itchyny/lightline.vim'
 Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/nerdtree'
-" Plugin 'Shougo/deoplete.nvim'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'roxma/nvim-yarp'
+Plugin 'roxma/vim-hug-neovim-rpc'
 Plugin 'zxqfl/tabnine-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
@@ -51,10 +53,11 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'fisle/vim-no-fixme'
 Plugin 'xolox/vim-misc'
+Plugin 'heavenshell/vim-pydocstring'
 
 " Linters/etc
 Plugin 'w0rp/ale'
-Plugin 'stsewd/isort.nvim'
+"Plugin 'stsewd/isort.nvim'
 Plugin 'maximbaz/lightline-ale'
 Plugin 'bpearson/vim-phpcs'
 Plugin 'autozimu/LanguageClient-neovim'
@@ -116,16 +119,23 @@ let @f = 'f,akD'
 set statusline+=%{ALEGetStatusLine()}
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+let g:ale_echo_msg_format = '%linter%: %s'
 "\   'python': ['flake8', 'pylint', 'python'],
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier'],
 \   'php': ['php', 'phpcs', 'phpmd'],
 \   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
 \   'bash': ['shellcheck'],
+\   'python': ['flake8', 'mypy', 'pylint'],
 \}
+
+command Isort ALEFix
+
+let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
+let g:ale_fixers['python'] = ['isort']
 let g:ale_javascript_prettier_use_local_config = 1
 
 let g:ale_php_phpcs_standard = 'PSR2'
@@ -133,18 +143,21 @@ let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
 
 let g:lightline = { 'colorscheme': 'powerline' }
 let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
       \  'linter_warnings': 'lightline#ale#warnings',
       \  'linter_errors': 'lightline#ale#errors',
       \  'linter_ok': 'lightline#ale#ok',
       \  'nofixme': 'nofixme#amount',
       \ }
 let g:lightline.component_type = {
+      \     'linter_checking': 'left',
       \     'linter_warnings': 'warning',
       \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
       \     'nofixme': 'warning',
       \ }
 let g:lightline.active = {
-    \ 'right': [['linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
+    \ 'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
     \ 'left': [['mode', 'paste'], ['readonly', 'relativepath', 'modified']]
     \ }
 
@@ -152,6 +165,7 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Keybinds
+nmap <silent> <C-_> <Plug>(pydocstring)
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
 map <F4> <Esc>:registers<CR>
@@ -231,8 +245,8 @@ let g:tagbar_type_go = {
     \ }
 let g:deoplete#enable_at_startup = 1
 " Disable the candidates in Comment/String syntaxes.
-" call deoplete#custom#source('_',
-"             \ 'disabled_syntaxes', ['Comment', 'String'])
+call deoplete#custom#source('_',
+            \ 'disabled_syntaxes', ['Comment', 'String'])
 " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " let g:deoplete#sources = {}
