@@ -7,7 +7,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 export TERMINAL=alacritty
-export EDITOR=nvim
+export EDITOR=vim
 export GOPATH=$HOME/dev/gopath
 export GOBIN=$GOPATH/bin
 PATH="$PATH:$GOBIN"
@@ -39,7 +39,7 @@ function ggpf()
 {
     git push origin "$(current_branch)" --force
 }
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+# export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 function t()
 {
@@ -72,3 +72,11 @@ scrot () {
     maim "$@" "$filename" && echo "$filename" | xclip
 }
 
+export QT_STYLE_OVERRIDE=gtk2
+alias kää='trans eng:fin'
+
+export TERM="xterm-256color"
+
+# function df () {
+#     command df "$@" | grep -v snap
+# }

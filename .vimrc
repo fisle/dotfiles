@@ -1,5 +1,14 @@
 set t_Co=256
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"
+if has('gui_running')
+    set guioptions-=e
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions-=r
+    set guioptions-=L
+    set guifont=Ubuntu\ Mono\ 9
+endif
 
 set fileencoding=utf-8
 set encoding=utf-8
@@ -24,73 +33,72 @@ set sidescrolloff=5
 
 let no_autopep8_maps = 1
 
-" Vundle
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim'
+call plug#begin('~/.vim/bundle')
 
 " Plugarit
-Plugin 'itchyny/lightline.vim'
-Plugin 'mattn/emmet-vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'roxma/nvim-yarp'
-Plugin 'roxma/vim-hug-neovim-rpc'
-Plugin 'zxqfl/tabnine-vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'rking/ag.vim'
-Plugin 'vim-scripts/Tabmerge'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'tell-k/vim-autopep8'
-Plugin 'majutsushi/tagbar'
-Plugin 'xolox/vim-easytags'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'fisle/vim-no-fixme'
-Plugin 'xolox/vim-misc'
-Plugin 'heavenshell/vim-pydocstring'
+Plug 'itchyny/lightline.vim'
+Plug 'mattn/emmet-vim'
+Plug 'scrooloose/nerdtree'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'rking/ag.vim'
+Plug 'Chun-Yang/vim-action-ag'
+Plug 'vim-scripts/Tabmerge'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'majutsushi/tagbar'
+Plug 'Wraul/vim-easytags', { 'branch': 'fix-universal-detection' }
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'fisle/vim-no-fixme'
+Plug 'xolox/vim-misc'
+Plug 'heavenshell/vim-pydocstring'
 
-" Linters/etc
-Plugin 'w0rp/ale'
-"Plugin 'stsewd/isort.nvim'
-Plugin 'maximbaz/lightline-ale'
-Plugin 'bpearson/vim-phpcs'
-Plugin 'autozimu/LanguageClient-neovim'
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+Plug 'bpearson/vim-phpcs'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/echodoc.vim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+"Plug 'mgee/lightline-bufferline'
 
 " Colors
-Plugin 'joshdick/onedark.vim'
-Plugin 'morhetz/gruvbox'
+Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
 
 " Sugar
-Plugin 'gorodinskiy/vim-coloresque'
+Plug 'gorodinskiy/vim-coloresque'
 
 " Best language pack (syntax etc)
-Plugin 'sheerun/vim-polyglot'
-Plugin 'alampros/vim-styled-jsx'
+Plug 'sheerun/vim-polyglot'
+Plug 'alampros/vim-styled-jsx'
 
 " Syntax - DEPRECATED Use polyglot
-Plugin 'lepture/vim-jinja'
-" Plugin 'digitaltoad/vim-jade'
-" Plugin 'jelera/vim-javascript-syntax'
-" Plugin 'pangloss/vim-javascript'
-" Plugin 'posva/vim-vue'
-" Plugin 'evidens/vim-twig'
-" Plugin 'ekalinin/Dockerfile.vim'
-" Plugin 'saltstack/salt-vim'
-" Plugin 'jwalton512/vim-blade'
-" Plugin 'maxmellon/vim-jsx-pretty'
-" Plugin 'Vimjas/vim-python-pep8-indent'
-" Plugin 'vim-python/python-syntax'
-" Plugin 'martinda/Jenkinsfile-vim-syntax'
+Plug 'lepture/vim-jinja'
+" Plug 'digitaltoad/vim-jade'
+" Plug 'jelera/vim-javascript-syntax'
+" Plug 'pangloss/vim-javascript'
+" Plug 'posva/vim-vue'
+" Plug 'evidens/vim-twig'
+" Plug 'ekalinin/Dockerfile.vim'
+" Plug 'saltstack/salt-vim'
+" Plug 'jwalton512/vim-blade'
+" Plug 'maxmellon/vim-jsx-pretty'
+" Plug 'Vimjas/vim-python-pep8-indent'
+" Plug 'vim-python/python-syntax'
+" Plug 'martinda/Jenkinsfile-vim-syntax'
 
-call vundle#end()
-filetype plugin indent on
-" vundle end
+call plug#end()
+
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'signature'
 
 let g:python_highlight_all = 1
 
@@ -126,8 +134,9 @@ let g:ale_linters = {
 \   'php': ['php', 'phpcs', 'phpmd'],
 \   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
 \   'bash': ['shellcheck'],
-\   'python': ['flake8', 'mypy', 'pylint'],
+\   'python': ['flake8', 'pylint'],
 \}
+"\   'python': ['flake8', 'mypy', 'pylint'],
 
 command Isort ALEFix
 
@@ -137,25 +146,29 @@ let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_fixers['python'] = ['isort']
 let g:ale_javascript_prettier_use_local_config = 1
+let g:ale_fix_on_save = 1
+let g:ale_python_pylint_change_directory = 0
 
 let g:ale_php_phpcs_standard = 'PSR2'
 let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
 
-let g:lightline = { 'colorscheme': 'powerline' }
+set showtabline=2
+let g:lightline = {}
+let g:lightline.colorscheme = 'powerline'
 let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \  'nofixme': 'nofixme#amount',
-      \ }
+    \ 'linter_checking': 'lightline#ale#checking',
+    \ 'linter_warnings': 'lightline#ale#warnings',
+    \ 'linter_errors': 'lightline#ale#errors',
+    \ 'linter_ok': 'lightline#ale#ok',
+    \ 'nofixme': 'nofixme#amount',
+    \ }
 let g:lightline.component_type = {
-      \     'linter_checking': 'left',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'left',
-      \     'nofixme': 'warning',
-      \ }
+    \ 'linter_checking': 'left',
+    \ 'linter_warnings': 'warning',
+    \ 'linter_errors': 'error',
+    \ 'linter_ok': 'left',
+    \ 'nofixme': 'warning',
+    \ }
 let g:lightline.active = {
     \ 'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
     \ 'left': [['mode', 'paste'], ['readonly', 'relativepath', 'modified']]
@@ -187,7 +200,7 @@ command Json :execute '%!python -m json.tool' | w
 command Todo :edit ~/dev/todo.md
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
-nnoremap <C-n> :call NumberToggle()<CR>
+nnoremap <C-b> :call NumberToggle()<CR>
 
 set laststatus=2
 
@@ -206,7 +219,7 @@ set noswapfile
 
 set statusline+=%#warningmsg#
 set statusline+=%*
-set cursorline
+"set cursorline
 
 let g:autopep8_ignore=''
 let g:autopep8_max_line_length=99
@@ -267,3 +280,5 @@ set background=dark
 "colorscheme jellybeans
 "colorscheme gruvbox
 colorscheme onedark
+
+let g:vim_action_ag_escape_chars = '#%.^$*+?()[{\\|'
