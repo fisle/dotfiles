@@ -1,6 +1,6 @@
 set t_Co=256
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"
+
 if has('gui_running')
     set guioptions-=e
     set guioptions-=m
@@ -50,7 +50,7 @@ Plug 'majutsushi/tagbar'
 Plug 'Wraul/vim-easytags', { 'branch': 'fix-universal-detection' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'fisle/vim-no-fixme'
+" Plug 'fisle/vim-no-fixme'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-pydocstring'
 
@@ -127,7 +127,7 @@ let @f = 'f,akD'
 set statusline+=%{ALEGetStatusLine()}
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
-let g:ale_echo_msg_format = '%linter%: %s'
+let g:ale_echo_msg_format = '%linter%: %s %(code)%'
 "\   'python': ['flake8', 'pylint', 'python'],
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier'],
@@ -146,7 +146,7 @@ let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_fixers['python'] = ['isort']
 let g:ale_javascript_prettier_use_local_config = 1
-let g:ale_fix_on_save = 1
+" let g:ale_fix_on_save = 1
 let g:ale_python_pylint_change_directory = 0
 
 let g:ale_php_phpcs_standard = 'PSR2'
@@ -160,17 +160,15 @@ let g:lightline.component_expand = {
     \ 'linter_warnings': 'lightline#ale#warnings',
     \ 'linter_errors': 'lightline#ale#errors',
     \ 'linter_ok': 'lightline#ale#ok',
-    \ 'nofixme': 'nofixme#amount',
     \ }
 let g:lightline.component_type = {
     \ 'linter_checking': 'left',
     \ 'linter_warnings': 'warning',
     \ 'linter_errors': 'error',
     \ 'linter_ok': 'left',
-    \ 'nofixme': 'warning',
     \ }
 let g:lightline.active = {
-    \ 'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok', 'nofixme'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
+    \ 'right': [['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'], ['lineinfo', 'percent'], ['fileformat', 'fileencoding', 'filetype']],
     \ 'left': [['mode', 'paste'], ['readonly', 'relativepath', 'modified']]
     \ }
 
