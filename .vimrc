@@ -102,7 +102,7 @@ let g:echodoc#type = 'signature'
 
 let g:python_highlight_all = 1
 
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR><Paste>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
 let g:LanguageClient_diagnosticsEnable = 0
 
@@ -280,3 +280,6 @@ set background=dark
 colorscheme onedark
 
 let g:vim_action_ag_escape_chars = '#%.^$*+?()[{\\|'
+
+" Disable deoplete opening scratch
+set completeopt-=preview
