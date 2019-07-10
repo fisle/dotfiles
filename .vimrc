@@ -32,6 +32,7 @@ set scrolloff=1
 set sidescrolloff=5
 
 let no_autopep8_maps = 1
+" let g:ale_completion_enabled = 1
 
 call plug#begin('~/.vim/bundle')
 
@@ -57,10 +58,16 @@ Plug 'heavenshell/vim-pydocstring'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'bpearson/vim-phpcs'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 Plug 'Shougo/echodoc.vim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -128,23 +135,23 @@ set statusline+=%{ALEGetStatusLine()}
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_echo_msg_format = '%linter%: %s %(code)%'
-"\   'python': ['flake8', 'pylint', 'python'],
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier'],
-\   'php': ['php', 'phpcs', 'phpmd'],
+\   'php': ['php', 'phpcs'],
 \   'go': ['go', 'gofmt', 'golint', 'gotype', 'govet'],
 \   'bash': ['shellcheck'],
-\   'python': ['flake8', 'pylint'],
+\   'python': ['flake8', 'pylint', 'mypy'],
 \}
-"\   'python': ['flake8', 'mypy', 'pylint'],
 
-command Isort ALEFix
-
+let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:ale_python_mypy_options = '--ignore-missing-imports'
+let g:ale_python_flake8_options = '--ignore=F401'
+" Disable auto-detection of virtual envs, falls back on ${VIRTUAL_ENV}
+" let g:ale_virtualenv_dir_names = []
 
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
-let g:ale_fixers['python'] = ['isort']
+let g:ale_fixers['python'] = ['isort', 'autopep8']
 let g:ale_javascript_prettier_use_local_config = 1
 " let g:ale_fix_on_save = 1
 let g:ale_python_pylint_change_directory = 0
@@ -186,6 +193,7 @@ nnoremap <F8> :!md2pdf % & <CR>
 map <F9> :CtrlPMRU<CR>
 nmap <F10> :TagbarToggle<CR>
 nmap <F11> :CtrlPTag<CR>
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 " Use FZF instead of CtrlP
 let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
@@ -217,7 +225,7 @@ set noswapfile
 
 set statusline+=%#warningmsg#
 set statusline+=%*
-"set cursorline
+set cursorline
 
 let g:autopep8_ignore=''
 let g:autopep8_max_line_length=99
