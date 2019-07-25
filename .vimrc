@@ -54,6 +54,7 @@ Plug 'junegunn/fzf.vim'
 " Plug 'fisle/vim-no-fixme'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-pydocstring'
+Plug 'jceb/vim-orgmode'
 
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
@@ -203,7 +204,7 @@ map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 command Json :execute '%!python -m json.tool' | w
-command Todo :edit ~/dev/todo.md
+command Todo :edit ~/dev/todo.org
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-b> :call NumberToggle()<CR>
