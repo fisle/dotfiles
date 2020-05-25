@@ -39,7 +39,12 @@ alias cdc='cd $(find . -type d | fzf)'
 
 function ggpf()
 {
-    git push origin "$(current_branch)" --force
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$branch" = "master" ]; then
+        echo "Not gonna force push master branch"
+    else
+        git push origin "$(current_branch)" --force-with-lease
+    fi
 }
 # export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
@@ -68,6 +73,30 @@ function mm () {
 alias mmr='v ssh -c "mr"' 
 alias gremove='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'
 
+dm () {
+    container=$(docker-compose config --services | grep -E 'app|django')
+    manage_location=$(find . -type f -name manage.py)
+    docker-compose exec "$container" python "$manage_location" "$@"
+}
+
+dmr () {
+    config=$(docker-compose config)
+    container=$(docker-compose config --services | grep -E 'app|django')
+    manage_location=$(find . -type f -name manage.py)
+    composer_version=$(echo $config | awk '/version/ {print $2}')
+
+    if [ "$composer_version" = "'3.7'" ]; then
+        local_port=$(echo $config | awk '/published/ {print $3; exit}')
+        target_port=$(echo $config | awk '/target/ {print $2; exit}')
+    else
+        local_port=$(echo $config | awk '/ports/ {getline; split($2,a,":"); print a[1]; exit}')
+        target_port=$(echo $config | awk '/ports/ {getline; split($2,a,":"); split(a[2],b,"/"); print b[1]; exit}')
+    fi
+    docker-compose exec "$container" python "$manage_location" runserver 0.0.0.0:"$target_port"
+}
+
+alias d-c='docker-compose'
+
 scrot () {
     date=$(date '+%Y-%m_%d-%H-%M-%S')
     filename="$HOME/Pictures/Screenshots/Screenshot-$date.png"
@@ -76,9 +105,40 @@ scrot () {
 
 export QT_STYLE_OVERRIDE=gtk2
 alias kää='trans eng:fin'
+alias pol='trans pol:eng'
 
 export TERM="xterm-256color"
+
+new_release () {
+    $(git fetch --tags)
+    today=$(date '+%Y-%m-%d')
+    revision=$(git tag --list | awk -F'.' '/'"$today"'/ {a=$2}END{print a+1}')
+    release="rel/$today.$revision"
+    timestamp=$(date -Iminutes)
+    git tag -a "$release" -m "$timestamp"
+    git push origin "$release"
+    echo "Release $release done!"
+}
+gptag () {
+    selected_tag=$(git tag --list | fzf)
+    git push origin "$selected_tag"
+}
 
 # function df () {
 #     command df "$@" | grep -v snap
 # }
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+gmd () {
+    compare_against="$1"
+
+    if [ -z "$compare_against" ]; then
+        compare_against="master"
+    fi
+
+    git cherry -v "$compare_against" "$(git rev-parse --abbrev-ref HEAD)" | xclip
+}
