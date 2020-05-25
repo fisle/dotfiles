@@ -33,6 +33,9 @@ set sidescrolloff=5
 
 let no_autopep8_maps = 1
 " let g:ale_completion_enabled = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 
 call plug#begin('~/.vim/bundle')
 
@@ -74,33 +77,13 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-"Plug 'mgee/lightline-bufferline'
 
 " Colors
 Plug 'joshdick/onedark.vim'
-Plug 'morhetz/gruvbox'
-
-" Sugar
-Plug 'gorodinskiy/vim-coloresque'
 
 " Best language pack (syntax etc)
 Plug 'sheerun/vim-polyglot'
 Plug 'alampros/vim-styled-jsx'
-
-" Syntax - DEPRECATED Use polyglot
-Plug 'lepture/vim-jinja'
-" Plug 'digitaltoad/vim-jade'
-" Plug 'jelera/vim-javascript-syntax'
-" Plug 'pangloss/vim-javascript'
-" Plug 'posva/vim-vue'
-" Plug 'evidens/vim-twig'
-" Plug 'ekalinin/Dockerfile.vim'
-" Plug 'saltstack/salt-vim'
-" Plug 'jwalton512/vim-blade'
-" Plug 'maxmellon/vim-jsx-pretty'
-" Plug 'Vimjas/vim-python-pep8-indent'
-" Plug 'vim-python/python-syntax'
-" Plug 'martinda/Jenkinsfile-vim-syntax'
 
 call plug#end()
 
@@ -108,7 +91,7 @@ set cmdheight=2
 let g:echodoc#enable_at_startup = 1
 let g:echodoc#type = 'signature'
 
-let g:python_highlight_all = 1
+" let g:python_highlight_all = 1
 
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
@@ -133,8 +116,6 @@ endfunc
 let @f = 'f,akD'
 
 set statusline+=%{ALEGetStatusLine()}
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
 let g:ale_echo_msg_format = '%linter%: %s %(code)%'
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier'],
@@ -146,18 +127,18 @@ let g:ale_linters = {
 
 let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:ale_python_mypy_options = '--ignore-missing-imports'
-let g:ale_python_flake8_options = '--ignore=F401'
 " Disable auto-detection of virtual envs, falls back on ${VIRTUAL_ENV}
 " let g:ale_virtualenv_dir_names = []
 
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_fixers['python'] = ['isort', 'autopep8']
+"let g:ale_fixers['python'] = ['black']
 let g:ale_javascript_prettier_use_local_config = 1
 " let g:ale_fix_on_save = 1
 let g:ale_python_pylint_change_directory = 0
 
-let g:ale_php_phpcs_standard = 'PSR2'
+let g:ale_php_phpcs_standard = 'PSR12'
 let g:ale_statusline_format = ['¿ %d', '¿ %d', '¿ ok']
 
 set showtabline=2
@@ -204,7 +185,8 @@ map! <F1> <del>
 "map <C-m> :let g:ale_php_phpcs_standard = 'Wordpress'<CR>
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 command Json :execute '%!python -m json.tool' | w
-command Todo :edit ~/dev/todo.org
+command Todo :edit ~/dev/todo.org | call deoplete#disable()
+command Tabnine :call deoplete#disable()
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-b> :call NumberToggle()<CR>
@@ -226,7 +208,7 @@ set noswapfile
 
 set statusline+=%#warningmsg#
 set statusline+=%*
-set cursorline
+set nocursorline
 
 let g:autopep8_ignore=''
 let g:autopep8_max_line_length=99
@@ -264,9 +246,12 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
     \ }
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources.python3 = ['LanguageClient']
+let g:deoplete#ignore_sources.python = ['LanguageClient']
 " Disable the candidates in Comment/String syntaxes.
-call deoplete#custom#source('_',
-            \ 'disabled_syntaxes', ['Comment', 'String'])
+" call deoplete#custom#source('_',
+"             \ 'disabled_syntaxes', ['Comment', 'String'])
 " autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " let g:deoplete#sources = {}
