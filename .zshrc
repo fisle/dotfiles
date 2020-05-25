@@ -9,6 +9,7 @@ source $ZSH/oh-my-zsh.sh
 export TERMINAL=alacritty
 export EDITOR=vim
 export GOPATH=$HOME/dev/gopath
+export GOROOT=/usr/local/go
 export GOBIN=$GOPATH/bin
 PATH="$PATH:$GOBIN"
 PATH="$PATH:$HOME/scripts"
@@ -18,8 +19,9 @@ PATH="$PATH:$HOME/.npm/bin"
 PATH="$PATH:$HOME/.cargo/bin"
 PATH="$PATH:$HOME/.bin"
 PATH="$PATH:$HOME/.local/bin"
+PATH="$PATH:$GOROOT/bin"
+PATH="$PATH:$HOME/.emacs.d/bin"
 export PATH=$PATH
-
 
 setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
