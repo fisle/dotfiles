@@ -34,7 +34,7 @@ set sidescrolloff=5
 call plug#begin('~/.vim/bundle')
 
 " Plugarit
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdtree'
@@ -46,7 +46,7 @@ Plug 'vim-scripts/Tabmerge'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'majutsushi/tagbar'
 Plug 'Wraul/vim-easytags', { 'branch': 'fix-universal-detection' }
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-pydocstring'
@@ -185,5 +185,38 @@ function! s:show_documentation()
   endif
 endfunction
 
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-let g:airline#extensions#tabline#enabled = 1
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+function! StatusDiagnostic() abort
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' ')
+endfunction
+
+let g:lightline = {
+  \ 'colorscheme': 'powerline',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'readonly', 'relativepath', 'modified' ] ],
+  \   'right': [[ 'cocstatus', 'currentfunction' ],
+  \             [ 'lineinfo', 'percent' ],
+  \             [ 'fileformat', 'fileencoding', 'filetype' ] ]
+  \ },
+  \ 'component_function': {
+  \   'cocstatus': 'StatusDiagnostic',
+  \   'currentfunction': 'CocCurrentFunction'
+  \ },
+  \ }
