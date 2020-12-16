@@ -51,6 +51,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-pydocstring'
 Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
 Plug 'bpearson/vim-phpcs'
 Plug 'Shougo/echodoc.vim'
 Plug 'joshdick/onedark.vim'
@@ -80,6 +81,9 @@ endfunc
 
 set showtabline=2
 
+set tags=./.tags;
+let g:easytags_dynamic_files = 2
+
 " Keybinds
 nmap <silent> <C-_> <Plug>(pydocstring)
 map <F2> :NERDTreeToggle<CR>
@@ -97,7 +101,7 @@ map! <F1> <del>
 
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 command Json :execute '%!python -m json.tool' | w
-command Todo :edit ~/dev/todo.org
+command Todo :edit ~/dev/todo.org | set ft=org
 
 nnoremap <silent> <C-t> <Esc>:tabnew<CR>
 nnoremap <C-b> :call NumberToggle()<CR>
@@ -220,3 +224,6 @@ let g:lightline = {
   \   'currentfunction': 'CocCurrentFunction'
   \ },
   \ }
+
+set updatetime=300
+set cpo+=d

@@ -74,14 +74,14 @@ alias mmr='v ssh -c "mr"'
 alias gremove='git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d'
 
 dm () {
-    container=$(docker-compose config --services | grep -E 'app|django')
+    container=$(docker-compose config --services | grep -E 'app|django|savmail' | grep -v 'db')
     manage_location=$(find . -type f -name manage.py)
     docker-compose exec "$container" python "$manage_location" "$@"
 }
 
 dmr () {
     config=$(docker-compose config)
-    container=$(docker-compose config --services | grep -E 'app|django')
+    container=$(docker-compose config --services | grep -E 'app|django|savmail' | grep -v 'db')
     manage_location=$(find . -type f -name manage.py)
     composer_version=$(echo $config | awk '/version/ {print $2}')
 
@@ -110,11 +110,11 @@ alias pol='trans pol:eng'
 export TERM="xterm-256color"
 
 new_release () {
-    $(git fetch --tags)
+    git fetch --tags
     today=$(date '+%Y-%m-%d')
     revision=$(git tag --list | awk -F'.' '/'"$today"'/ {a=$2}END{print a+1}')
     release="rel/$today.$revision"
-    timestamp=$(date -Iminutes)
+    timestamp=$(date +%Y-%m-%dT%H:%M%z)
     git tag -a "$release" -m "$timestamp"
     git push origin "$release"
     echo "Release $release done!"
@@ -141,4 +141,18 @@ gmd () {
     fi
 
     git cherry -v "$compare_against" "$(git rev-parse --abbrev-ref HEAD)" | xclip
+}
+
+export FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
+eval $(keychain --eval --quiet id_rsa)
+
+workon () {
+    PROJECT="$1"
+
+    if [ -z "$PROJECT" ]; then
+        echo "No project specified."
+        return 1
+    fi
+
+    source "$HOME/.venv/$PROJECT/bin/activate"
 }
