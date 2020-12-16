@@ -58,6 +58,9 @@ Plug 'joshdick/onedark.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'alampros/vim-styled-jsx'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+"Plug 'gkapfham/vim-vitamin-onec'
+Plug 'junegunn/vim-peekaboo'
 
 call plug#end()
 
@@ -89,13 +92,13 @@ nmap <silent> <C-_> <Plug>(pydocstring)
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
 map <F4> <Esc>:registers<CR>
-map <F9> :CtrlPMRU<CR>
+map <F9> :History<CR>
 nmap <F10> :TagbarToggle<CR>
-nmap <F11> :CtrlPTag<CR>
-" Use FZF instead of CtrlP
+nmap <F11> :Tags<CR>
+nnoremap <C-h> :BTags<CR>
+
 let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
-nnoremap <C-h> :CtrlPTag<CR>
 map <F1> <del>
 map! <F1> <del>
 
@@ -227,3 +230,22 @@ let g:lightline = {
 
 set updatetime=300
 set cpo+=d
+
+function MyCustomHighlights()
+    hi semshiLocal           ctermfg=209 guifg=#ff875f
+    hi semshiGlobal          ctermfg=214 guifg=#ffaf00
+    hi semshiImported        ctermfg=214 guifg=#ffffff cterm=none gui=none
+    hi semshiParameter       ctermfg=75  guifg=#5fafff
+    hi semshiParameterUnused ctermfg=117 guifg=#87d7ff cterm=underline gui=underline
+    hi semshiFree            ctermfg=218 guifg=#ffafd7
+    hi semshiBuiltin         ctermfg=207 guifg=#ff5fff
+    hi semshiAttribute       ctermfg=49  guifg=#00ffaf
+    hi semshiSelf            ctermfg=249 guifg=#b2b2b2
+    hi semshiUnresolved      ctermfg=226 guifg=#ffff00 cterm=underline gui=underline
+    hi semshiSelected        ctermfg=231 guifg=#ffffff ctermbg=161 guibg=#d7005f
+
+    hi semshiErrorSign       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
+    hi semshiErrorChar       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
+    sign define semshiError text=E> texthl=semshiErrorSign
+endfunction
+autocmd FileType python call MyCustomHighlights()
