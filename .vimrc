@@ -1,4 +1,4 @@
-set t_Co=256
+"set t_Co=256
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 if has('gui_running')
@@ -36,6 +36,7 @@ call plug#begin('~/.vim/bundle')
 " Plugarit
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'f-person/git-blame.nvim'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -45,7 +46,7 @@ Plug 'Chun-Yang/vim-action-ag'
 Plug 'vim-scripts/Tabmerge'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'majutsushi/tagbar'
-Plug 'Wraul/vim-easytags', { 'branch': 'fix-universal-detection' }
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'xolox/vim-misc'
@@ -54,13 +55,21 @@ Plug 'jceb/vim-orgmode'
 Plug 'tpope/vim-speeddating'
 Plug 'bpearson/vim-phpcs'
 Plug 'Shougo/echodoc.vim'
-Plug 'joshdick/onedark.vim'
+"Plug 'joshdick/onedark.vim'
+"Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sheerun/vim-polyglot'
 Plug 'alampros/vim-styled-jsx'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-"Plug 'gkapfham/vim-vitamin-onec'
-Plug 'junegunn/vim-peekaboo'
+Plug 'mbbill/undotree'
+"Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+"Plug 'junegunn/vim-peekaboo'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+Plug 'kana/vim-textobj-user'
+Plug 'sgur/vim-textobj-parameter'
+Plug 'AckslD/nvim-revJ.lua'
+"Plug 'yamatsum/nvim-cursorline'
+Plug 'sainnhe/edge'
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 
@@ -85,9 +94,10 @@ endfunc
 set showtabline=2
 
 set tags=./.tags;
-let g:easytags_dynamic_files = 2
+let g:gutentags_ctags_tagfile = '.tags'
 
 " Keybinds
+nnoremap <F5> :UndotreeToggle<CR>
 nmap <silent> <C-_> <Plug>(pydocstring)
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
@@ -96,6 +106,8 @@ map <F9> :History<CR>
 nmap <F10> :TagbarToggle<CR>
 nmap <F11> :Tags<CR>
 nnoremap <C-h> :BTags<CR>
+" Escape from terminal with jj
+tnoremap jj <C-\><C-n>
 
 let g:ctrlp_cmd = 'Files'
 nnoremap <C-l> :CtrlPBuffer<CR>
@@ -122,11 +134,12 @@ set fillchars+=vert:┃
 
 set nobackup
 set noswapfile
-set nocursorline
+"set nocursorline
+set cursorline
+set cursorcolumn
 
 let NERDTreeIgnore = ['\.pyc$']
 
-let g:easytags_async = 1
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -155,31 +168,38 @@ let g:tagbar_type_go = {
     \ 'ctagsargs' : '-sort -silent'
     \ }
 
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+let $FZF_DEFAULT_COMMAND = 'ag -U -g ""'
 
 let g:jsx_ext_required = 0 " allow jsx in js files
 let g:vim_jsx_pretty_colorful_config = 1
 
 set background=dark
-"colorscheme monokai
-"colorscheme jellybeans
-"colorscheme gruvbox
-colorscheme onedark
+"colorscheme onedark
 
 let g:vim_action_ag_escape_chars = '#%.^$*+?()[{\\|'
 
 " Disable deoplete opening scratch
 set completeopt-=preview
 
+let mapleader="\<Space>"
+let maplocalleader="-"
+
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> <C-k> <Plug>(coc-diagnostic-prev)
 nmap <silent> <C-j> <Plug>(coc-diagnostic-next)
+nmap <localleader>k <Plug>(GitGutterPrevHunk)
+nmap <localleader>j <Plug>(GitGutterNextHunk)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <leader>rn <Plug>(coc-rename)
+nmap <silent> gD :call CocAction('jumpDefinition', 'tabe')<CR>
+" Trigger completion ctrl+space
+inoremap <silent><expr> <c-space> coc#refresh()
+command -nargs=0 Swagger :CocCommand swagger.render
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -249,3 +269,42 @@ function MyCustomHighlights()
     sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
 autocmd FileType python call MyCustomHighlights()
+
+lua << EOF
+require("revj").setup{
+    brackets = {first = '([{<', last = ')]}>'}, -- brackets to consider surrounding arguments
+    new_line_before_last_bracket = true, -- add new line between last argument and last bracket (only if no last seperator)
+    add_seperator_for_last_parameter = true, -- if a seperator should be added if not present after last parameter
+    enable_default_keymaps = false, -- enables default keymaps without having to set them below
+    keymaps = {
+        operator = '<Leader>J', -- for operator (+motion)
+        line = '<Leader>j', -- for formatting current line
+        visual = '<Leader>j', -- for formatting visual selection
+    },
+}
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    -- disable = { "c", "rust" },  -- list of language that will be disabled
+  },
+}
+EOF
+
+let g:edge_style = 'aura'
+let g:edge_enable_italic = 1
+let g:edge_disable_italic_comment = 1
+colo edge
+
+let g:goyo_width=100
+let g:goyo_height=90
+
+function! s:goyo_enter()
+    GitGutterEnable
+    "silent! call lightline#enable()
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
