@@ -14,6 +14,14 @@ set fileencoding=utf-8
 set encoding=utf-8
 set termencoding=utf-8
 
+set hidden
+
+set nobackup
+set nowritebackup
+set noswapfile
+
+set shortmess+=c
+
 set expandtab
 set shiftwidth=4
 set softtabstop=4
@@ -39,7 +47,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'f-person/git-blame.nvim'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdtree'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'rking/ag.vim'
 Plug 'Chun-Yang/vim-action-ag'
@@ -68,8 +76,12 @@ Plug 'kana/vim-textobj-user'
 Plug 'sgur/vim-textobj-parameter'
 Plug 'AckslD/nvim-revJ.lua'
 "Plug 'yamatsum/nvim-cursorline'
-Plug 'sainnhe/edge'
 Plug 'junegunn/goyo.vim'
+Plug 'sainnhe/edge'
+"Plug 'mhartington/oceanic-next'
+"Plug 'bluz71/vim-nightfly-guicolors'
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 call plug#end()
 
@@ -97,22 +109,25 @@ set tags=./.tags;
 let g:gutentags_ctags_tagfile = '.tags'
 
 " Keybinds
-nnoremap <F5> :UndotreeToggle<CR>
-nmap <silent> <C-_> <Plug>(pydocstring)
+"map <F1> <del>
+"map! <F1> <del>
+map <F1> <Esc>:registers<CR>
 map <F2> :NERDTreeToggle<CR>
 set pastetoggle=<F3>
-map <F4> <Esc>:registers<CR>
+nnoremap <F5> :UndotreeToggle<CR>
 map <F9> :History<CR>
 nmap <F10> :TagbarToggle<CR>
 nmap <F11> :Tags<CR>
+
+nmap <silent> <C-_> <Plug>(pydocstring)
 nnoremap <C-h> :BTags<CR>
 " Escape from terminal with jj
 tnoremap jj <C-\><C-n>
 
-let g:ctrlp_cmd = 'Files'
-nnoremap <C-l> :CtrlPBuffer<CR>
-map <F1> <del>
-map! <F1> <del>
+" let g:ctrlp_cmd = 'Files'
+" nnoremap <C-l> :CtrlPBuffer<CR>
+nnoremap <C-l> :Buffers<CR>
+nnoremap <C-p> :Files<CR>
 
 command Wordpress let g:ale_php_phpcs_standard = 'Wordpress'
 command Json :execute '%!python -m json.tool' | w
@@ -131,12 +146,9 @@ autocmd FileType * if &filetype == 'go' | set colorcolumn=80,100 | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 set fillchars+=vert:┃
-
-set nobackup
-set noswapfile
 "set nocursorline
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 
 let NERDTreeIgnore = ['\.pyc$']
 
@@ -184,6 +196,9 @@ set completeopt-=preview
 let mapleader="\<Space>"
 let maplocalleader="-"
 
+nnoremap <silent> <localleader>h ?TODO\\|FIXME<CR>
+nnoremap <silent> <localleader>l /TODO\\|FIXME<CR>
+
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> <C-k> <Plug>(coc-diagnostic-prev)
 nmap <silent> <C-j> <Plug>(coc-diagnostic-next)
@@ -199,6 +214,19 @@ nmap <leader>rn <Plug>(coc-rename)
 nmap <silent> gD :call CocAction('jumpDefinition', 'tabe')<CR>
 " Trigger completion ctrl+space
 inoremap <silent><expr> <c-space> coc#refresh()
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+let g:coc_snippet_next = '<tab>'
+
 command -nargs=0 Swagger :CocCommand swagger.render
 
 " Use K to show documentation in preview window.
@@ -207,8 +235,10 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
   else
-    call CocAction('doHover')
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 
@@ -284,11 +314,11 @@ require("revj").setup{
 }
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-    -- disable = { "c", "rust" },  -- list of language that will be disabled
-  },
+    ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    highlight = {
+        enable = true,              -- false will disable the whole extension
+        -- disable = { "c", "rust" },  -- list of language that will be disabled
+    },
 }
 EOF
 
@@ -308,3 +338,24 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+let g:gitblame_date_format = '%r'
+highlight link TSError Normal
+let g:indent_blankline_use_treesitter = v:true
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
